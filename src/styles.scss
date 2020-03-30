@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face{
+    font-family: open-sans;
+    src:url('/src/assets/fonts/OpenSans-Regular.ttf')
+}
+
+*{
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+}

@@ -1,0 +1,43 @@
+<div class="flex-container">
+    <div id="loginForm">
+        <h1>PRIHLÁS SA</h1>
+       
+        <form>
+            <label for="email">E-mail</label>
+            <input type="email" name="email" id="emial">
+            <label for="password">Heslo</label>
+            <input type="password" name="password" id="password">
+            <button type="submit" routerLink="/login" (click)="logIn()">Submit</button>
+        </form>
+       </div>
+       <div id="loginGreet">
+           <svg id="polygons">
+               <polygon points="0,0 0,80 80,40"/>
+               <polygon points="0,80 0,160 80,120"/>
+               <polygon points="0,160 0,240 80,200"/>
+               <polygon points="0,240 0,320 80,280"/>
+               <polygon points="0,320 0,400 80,360"/>
+               <polygon points="0,400 0,480 80,440"/>
+               <polygon points="0,480 0,560 80,520"/>
+               <polygon points="0,560 0,640 80,600"/>
+               <polygon points="0,640 0,720 80,680"/>
+               <polygon points="0,720 0,800 80,760"/>
+               <polygon points="0,800 0,880 80,840"/>
+               <polygon points="0,880 0,960 80,920"/>
+               <polygon points="0,960 0,1040 80,1000"/>
+               <polygon points="0,1040 0,1120 80,1080"/>
+           </svg>
+       
+           <div id="greeting">
+               <div class="imgHolder">       
+                    <img src="http://www.spsjm.sk/wp-content/uploads/WEB-photo/logo_spsjm_anim_2.gif" alt="spsjm logo">
+               </div>
+       
+               <div class="textHolder">
+                   <h1>VITAJ</h1>
+                   <h2>MURGAŠÁK</h2>
+               </div>
+           </div>
+       
+       </div>
+</div>

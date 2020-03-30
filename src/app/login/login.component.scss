@@ -1,0 +1,103 @@
+@import "src/assets/shared/variables.scss";
+
+.flex-container{
+    display: flex;
+
+}
+
+#loginForm, #loginGreet{
+    height: 100vh;
+}
+
+#loginForm{
+    background: $neutral-gray-light;
+    width: 60vw;
+    float: left;
+
+    h1{
+        color: $base-color;
+        font-size: 4.6875vw;
+        margin-top: 4rem;
+        text-align: center;
+    }
+
+    form{
+        display: flex;
+        flex-direction: column;
+        width: 45.3125vw;
+        margin: 8rem auto 0;
+
+        label, button[type=submit]{
+            color: $base-color;
+            font-size: 1.5625vw;
+            font-weight: bold;
+            margin: 3rem 0 .3rem 0;
+        }
+
+        input, button[type=submit]{
+            background: white;
+            height: 3.6458333333333335vw;
+            border: none;
+            border-radius: 25px;
+            box-shadow: 2px 6px 0 $default-darker-shadow;
+            padding-left: 20px;
+            outline: none;
+            font-size: 1.5625vw;
+        }
+
+        button[type=submit]{
+            width: 13.020833333333334vw;
+            margin: 3rem auto;
+        }
+    }
+
+}
+
+#loginGreet{
+    display: flex;
+    flex-direction: row;
+    background: $base-color;
+    width: 40vw;
+    float: right;
+    
+
+    svg#polygons{
+        height: inherit;
+        width: 80px;
+
+        polygon{
+            fill: $neutral-gray-light;
+        }
+    }
+
+    #greeting{
+        flex-grow: 2;
+
+        display: flex;
+        flex-direction: column;
+
+        text-align: center;
+        .imgHolder{
+            margin-top: 3rem;
+
+            img{
+                height: auto;
+                width: 14.739583333333334vw
+            }
+        }
+
+        .textHolder{
+            color: $neutral-gray-light;
+
+            h1{
+                font-size: 7.8125vw
+            }
+
+            h2{
+                font-size: 3.6458333333333335vw;
+                font-weight: 100;
+            }
+        }
+
+    }
+}

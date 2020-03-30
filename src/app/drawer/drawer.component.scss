@@ -1,0 +1,63 @@
+@import "src/assets/shared/variables.scss";
+
+nav#drawer{
+    position: relative;
+    z-index: 10;
+     
+    overflow: hidden;
+    background: $base-shade;
+
+    box-shadow: 0 6px 0 #F9FAFB80;
+
+    margin-top: -190px;
+
+    ul, .apps{
+        -webkit-padding-start: 0;
+        display: flex;
+        flex-direction: row;
+        list-style: none;
+        justify-content: space-between;
+
+        li, li img{
+            width: 150px;
+            height: auto;
+        }
+
+        li{
+            margin: 1rem 2rem 0;
+            
+            &:last-child{
+                transform: translate(0, -5px);
+            }
+
+            label{
+                color: $neutral-gray-light;
+                display: block;
+                text-align: center;
+            }
+        }
+
+    }
+
+    img#drawerTrigger{
+        display: block;
+        width: 25px;
+        height: auto;
+        margin: 0 auto .2rem;
+
+        transform: rotate(90deg);
+
+        cursor: pointer;
+    }
+
+}
+
+.overlay{
+    background: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: .45;
+}

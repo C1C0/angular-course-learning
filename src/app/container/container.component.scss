@@ -1,0 +1,9 @@
+@import "src/assets/shared/variables.scss";
+
+#container{
+    background: $neutral-gray-light;
+    width: 900px;
+    margin: auto;
+    height: 100vh;
+    overflow-y: auto;
+}
