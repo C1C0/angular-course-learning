@@ -1,20 +1,23 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { FaqComponent } from './container/faq/faq.component';
-import { HomeComponent } from './container/home/home.component';
-import { ProfileComponent } from './profile/profile.component';
-
+import { AuthGuard } from './auth/auth-guard.service';
 
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
-  {path: 'faq', component: FaqComponent},
-  {path: 'home', component: HomeComponent},
-  {path: 'profile', component: ProfileComponent},
+  {
+    path: 'home',
+    loadChildren: () => import('./main/main.module').then((m) => m.MainModule),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'login',
+    loadChildren: () =>
+      import('./login/login.module').then((m) => m.LoginModule),
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

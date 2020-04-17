@@ -1,43 +1,91 @@
 <div class="flex-container">
-    <div id="loginForm">
-        <h1>PRIHLÁS SA</h1>
-       
-        <form>
-            <label for="email">E-mail</label>
-            <input type="email" name="email" id="emial">
-            <label for="password">Heslo</label>
-            <input type="password" name="password" id="password">
-            <button type="submit" routerLink="/login" (click)="logIn()">Submit</button>
-        </form>
-       </div>
-       <div id="loginGreet">
-           <svg id="polygons">
-               <polygon points="0,0 0,80 80,40"/>
-               <polygon points="0,80 0,160 80,120"/>
-               <polygon points="0,160 0,240 80,200"/>
-               <polygon points="0,240 0,320 80,280"/>
-               <polygon points="0,320 0,400 80,360"/>
-               <polygon points="0,400 0,480 80,440"/>
-               <polygon points="0,480 0,560 80,520"/>
-               <polygon points="0,560 0,640 80,600"/>
-               <polygon points="0,640 0,720 80,680"/>
-               <polygon points="0,720 0,800 80,760"/>
-               <polygon points="0,800 0,880 80,840"/>
-               <polygon points="0,880 0,960 80,920"/>
-               <polygon points="0,960 0,1040 80,1000"/>
-               <polygon points="0,1040 0,1120 80,1080"/>
-           </svg>
-       
-           <div id="greeting">
-               <div class="imgHolder">       
-                    <img src="http://www.spsjm.sk/wp-content/uploads/WEB-photo/logo_spsjm_anim_2.gif" alt="spsjm logo">
-               </div>
-       
-               <div class="textHolder">
-                   <h1>VITAJ</h1>
-                   <h2>MURGAŠÁK</h2>
-               </div>
-           </div>
-       
-       </div>
+  <div class="loginForm">
+    <h1 *ngIf="!initLogin; else nastavSiHeslo">PRIHLÁS SA</h1>
+
+    <ng-template #nastavSiHeslo>
+      <h1 style="font-weight: lighter;">
+        NASTAV SI <span style="font-weight: bold;">HESLO</span>
+      </h1>
+    </ng-template>
+
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="onLogIn()"
+      *ngIf="!initLogin; else changePass"
+    >
+      <label
+        for="email"
+        >E-mail</label
+      >
+      <input name="email" id="email" formControlName="email" />
+      <label
+        for="password"
+        >Heslo</label
+      >
+      <input
+        type="password"
+        name="password"
+        id="password"
+        formControlName="password"
+      />
+      <button
+        type="submit"
+        style="cursor: pointer;"
+        [disabled]="loginForm.invalid"
+      >
+        Submit
+      </button>
+    </form>
+
+    <ng-template #changePass>
+      <app-chaned-pass></app-chaned-pass>
+    </ng-template>
+  </div>
+  <div id="loginGreet">
+    <svg id="polygons">
+      <polygon points="0,0 0,80 80,40" />
+      <polygon points="0,80 0,160 80,120" />
+      <polygon points="0,160 0,240 80,200" />
+      <polygon points="0,240 0,320 80,280" />
+      <polygon points="0,320 0,400 80,360" />
+      <polygon points="0,400 0,480 80,440" />
+      <polygon points="0,480 0,560 80,520" />
+      <polygon points="0,560 0,640 80,600" />
+      <polygon points="0,640 0,720 80,680" />
+      <polygon points="0,720 0,800 80,760" />
+      <polygon points="0,800 0,880 80,840" />
+      <polygon points="0,880 0,960 80,920" />
+      <polygon points="0,960 0,1040 80,1000" />
+      <polygon points="0,1040 0,1120 80,1080" />
+    </svg>
+
+    <div id="greeting">
+      <div class="imgHolder">
+        <img
+          src="http://www.spsjm.sk/wp-content/uploads/WEB-photo/logo_spsjm_anim_2.gif"
+          alt="spsjm logo"
+        />
+      </div>
+
+      <div class="textHolder" *ngIf="!initLogin">
+        <h1>VITAJ</h1>
+        <h2>MURGAŠÁK</h2>
+      </div>
+
+      <div class="textHolder" *ngIf="initLogin">
+        <h3 class="light" style="padding-top: 5rem;">ZDÁ SA, ŽE SI TU</h3>
+        <h3>PRVÝKRÁT</h3>
+      </div>
+
+      <div class="inputErrors" *ngIf="initLogin">
+        <p>*Nezabudni, <strong>bezpečné heslo</strong> obsahuje:</p>
+        <ul>
+          <li>Minimálne 8 znakov</li>
+          <li>Minimálne jeden veľký znak</li>
+          <li>Minimálne jedna číslica</li>
+          <li>Odporúčanie: Aspoň jeden znak (@,!,#,atď ...)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>

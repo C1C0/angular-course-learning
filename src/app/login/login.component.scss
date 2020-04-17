@@ -5,11 +5,11 @@
 
 }
 
-#loginForm, #loginGreet{
+.loginForm, #loginGreet{
     height: 100vh;
 }
 
-#loginForm{
+.loginForm{
     background: $neutral-gray-light;
     width: 60vw;
     float: left;
@@ -32,6 +32,12 @@
             font-size: 1.5625vw;
             font-weight: bold;
             margin: 3rem 0 .3rem 0;
+        }
+
+        
+        label.ng-invalid.ng-touched{
+            color: red;
+            text-decoration: underline;
         }
 
         input, button[type=submit]{
@@ -96,6 +102,41 @@
             h2{
                 font-size: 3.6458333333333335vw;
                 font-weight: 100;
+            }
+
+            h3{
+                font-size: 3.125vw
+            }
+            h3.light{
+                font-weight: lighter;
+            }
+        }
+
+        .inputErrors{
+            padding-top: 2.5rem;
+            width: 30vw;
+            margin: 0 auto;
+            font-size: 1.5625vw;
+
+            p{
+                color: white;
+            }
+            
+            ul{
+                background: white;
+                list-style: '-';
+                list-style-position: outside;
+                text-align: left;
+                margin: .5rem auto 0;
+                padding: .9rem 1.5rem;
+                border-radius: 25px;
+                box-shadow: 2px 6px 0 $default-darker-shadow;
+
+                li{
+                    line-height: 1.5em;
+                    padding-left: .6rem;
+                }
+
             }
         }
 

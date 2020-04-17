@@ -7,3 +7,11 @@
     font-family: 'Open Sans', sans-serif;
     margin: 0;
 }
+
+a{
+    cursor: pointer;
+}
+
+button:disabled{
+    opacity: .5;
+}

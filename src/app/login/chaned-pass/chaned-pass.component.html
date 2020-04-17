@@ -1,0 +1,14 @@
+<div class="loginForm">
+  <form [formGroup]="changePassForm" (ngSubmit)="onSubmit()">
+    <label for="password">Nové heslo</label>
+    <input type="password" name="password" id="password" formControlName="password" />
+    <label for="password">Potvrď heslo</label>
+    <input
+      type="password"
+      name="checkPassword"
+      id="checkPassword"
+      formControlName="checkPassword"
+    />
+    <button type="submit" style="cursor: pointer;" [disabled]="changePassForm.invalid">Submit</button>
+  </form>
+</div>
