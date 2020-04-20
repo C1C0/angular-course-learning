@@ -1,7 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { Component, OnInit, HostListener } from '@angular/core';
+import {
+  FormGroup,
+  Validators,
+  FormControl,
+  ValidatorFn,
+  AbstractControl,
+  AsyncValidatorFn,
+} from '@angular/forms';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { FormCheckingService } from '../form-checking.service';
 
 @Component({
   selector: 'app-chaned-pass',
@@ -11,18 +20,45 @@ import { Router } from '@angular/router';
 export class ChanedPassComponent implements OnInit {
   changePassForm: FormGroup;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  firstPass: string;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private formCheck: FormCheckingService
+  ) {}
 
   ngOnInit(): void {
     this.changePassForm = new FormGroup({
       password: new FormControl(null, [
         Validators.required,
-        Validators.minLength(6),
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/),
       ]),
-      checkPassword: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(6),
-      ]),
+      checkPassword: new FormControl(null, {
+        validators: [Validators.required],
+        asyncValidators: this.hasToMatch.bind(this),
+        updateOn: 'blur',
+      }),
+    });
+  }
+
+  //handling error service
+  onGetError(form: FormGroup, property: string) {
+    return this.formCheck.getError(form, property);
+  }
+
+  //checks, if passwords match
+  hasToMatch(control: AbstractControl): Promise<any> | Observable<any> {
+    return new Promise((resolve, reject) => {
+      //not good solution, because if has to fetch after timeout but probably good enough to work with updateOn:'blur'
+      setTimeout(() => {
+        if (control.value !== this.changePassForm.get('password').value) {
+          resolve({ noMatch: true });
+        } else {
+          resolve(null);
+        }
+      }, 20);
     });
   }
 
@@ -32,10 +68,8 @@ export class ChanedPassComponent implements OnInit {
     let p1: string = this.changePassForm.get('password').value;
     let p2: string = this.changePassForm.get('checkPassword').value;
 
-    if(this.authService.changePass(p1, p2)){
-      this.router.navigate(['/home']);
-    };
-
-    
+    if (this.authService.changePass(p1, p2)) {
+      this.router.navigate(['/user/home']);
+    }
   }
 }

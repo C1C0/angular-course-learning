@@ -5,6 +5,7 @@ import { UsersService } from './users.service';
 import { LocalStorageService } from '../shared/local-storage.service';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,8 @@ export class AuthService {
 
   constructor(
     private UsersService: UsersService,
-    private lss: LocalStorageService
+    private lss: LocalStorageService,
+    private http: HttpClient
   ) {}
 
   //get all users from offline version and checks credentials
@@ -31,8 +33,15 @@ export class AuthService {
         if (user.passwordChanged) {
           this.lss.setToLS(this.lss.userData, user);
         }
+        this.http.get('http://192.168.1.40:35100/').subscribe(data => {
+          console.log(data);
+        });
+        return false;
       }
     }
+    return true;
+
+    
   }
 
   //we just set null user

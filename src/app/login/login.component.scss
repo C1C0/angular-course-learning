@@ -35,8 +35,8 @@
         }
 
         
-        label.ng-invalid.ng-touched{
-            color: red;
+        label.ng-touched{
+            color: $accent-shade1;
             text-decoration: underline;
         }
 
@@ -54,6 +54,11 @@
         button[type=submit]{
             width: 13.020833333333334vw;
             margin: 3rem auto;
+        }
+
+        p.invalid{
+            font-size: .95em;
+            color: $accent-color;
         }
     }
 
@@ -87,16 +92,18 @@
             margin-top: 3rem;
 
             img{
-                height: auto;
-                width: 14.739583333333334vw
+                max-height: auto;
+                max-width: 12.739583333333334vw
             }
         }
 
         .textHolder{
             color: $neutral-gray-light;
+            padding-top: 3rem;;
 
             h1{
-                font-size: 7.8125vw
+                font-size: 7.8125vw;
+                line-height: 1.5em;
             }
 
             h2{
@@ -120,9 +127,11 @@
 
             p{
                 color: white;
+                text-align: left;
             }
             
             ul{
+                color: $base-color;
                 background: white;
                 list-style: '-';
                 list-style-position: outside;

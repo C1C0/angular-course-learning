@@ -7,9 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainComponent implements OnInit {
 
+  faqLoaded: boolean;
+
   constructor() { }
 
   ngOnInit(): void {
+    
+  }
+
+  onActivate(event){
+    this.faqLoaded = event.faqLoaded;
   }
 
 }

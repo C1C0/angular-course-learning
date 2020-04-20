@@ -14,14 +14,31 @@
       *ngIf="!initLogin; else changePass"
     >
       <label
+      [appFormChecking]="loginForm"
+      [formCheckingInputParam]="'email'"
         for="email"
         >E-mail</label
       >
+
+      <div *ngIf="onGetError(loginForm,'email')">
+        <p class="invalid">*Toto pole je povinné</p>
+        <p class="invalid">*E-mail nemá správny formát</p>
+      </div>
+
       <input name="email" id="email" formControlName="email" />
       <label
+      [appFormChecking]="loginForm"
+      [formCheckingInputParam]="'password'"
         for="password"
         >Heslo</label
       >
+
+      <div *ngIf="onGetError(loginForm,'password')">
+        <p class="invalid">*Toto pole je povinné</p>
+        <p class="invalid">*Minimálne 8 znakov</p>
+      </div>
+      
+
       <input
         type="password"
         name="password"
@@ -35,6 +52,7 @@
       >
         Submit
       </button>
+      <p class="invalid" *ngIf="invalidCredentials">*Nesprávny E-mail alebo heslo</p>
     </form>
 
     <ng-template #changePass>
@@ -62,7 +80,7 @@
     <div id="greeting">
       <div class="imgHolder">
         <img
-          src="http://www.spsjm.sk/wp-content/uploads/WEB-photo/logo_spsjm_anim_2.gif"
+          src="../../assets/img/spsjm_logo_static.png"
           alt="spsjm logo"
         />
       </div>
@@ -73,18 +91,19 @@
       </div>
 
       <div class="textHolder" *ngIf="initLogin">
-        <h3 class="light" style="padding-top: 5rem;">ZDÁ SA, ŽE SI TU</h3>
+        <h3 class="light">ZDÁ SA, ŽE SI TU</h3>
         <h3>PRVÝKRÁT</h3>
       </div>
 
       <div class="inputErrors" *ngIf="initLogin">
-        <p>*Nezabudni, <strong>bezpečné heslo</strong> obsahuje:</p>
+        <p>Nezabudni, <strong>bezpečné heslo</strong> obsahuje:</p>
         <ul>
-          <li>Minimálne 8 znakov</li>
-          <li>Minimálne jeden veľký znak</li>
-          <li>Minimálne jedna číslica</li>
+          <li>Minimálne 8 znakov*</li>
+          <li>Minimálne jeden veľký znak*</li>
+          <li>Minimálne jedna číslica*</li>
           <li>Odporúčanie: Aspoň jeden znak (@,!,#,atď ...)</li>
         </ul>
+        <p>* - Musí byť splnené</p>
       </div>
     </div>
   </div>

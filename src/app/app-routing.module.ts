@@ -3,16 +3,16 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './auth/auth-guard.service';
 
 const routes: Routes = [
-  {path: '', redirectTo: '/home', pathMatch: 'full'},
+  {path: '', redirectTo: '/user/home', pathMatch: 'full'},
   {
-    path: 'home',
+    path: 'user',
     loadChildren: () => import('./main/main.module').then((m) => m.MainModule),
     canActivate: [AuthGuard],
   },
   {
     path: 'login',
     loadChildren: () =>
-      import('./login/login.module').then((m) => m.LoginModule),
+      import('./login/login.module').then((m) => m.LoginModule)
   },
 ];
 

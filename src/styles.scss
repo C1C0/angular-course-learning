@@ -1,3 +1,5 @@
+@import './assets/shared/variables.scss';
+
 @font-face{
     font-family: open-sans;
     src:url('/src/assets/fonts/OpenSans-Regular.ttf')
@@ -8,10 +10,26 @@
     margin: 0;
 }
 
+body{
+    overflow: hidden;
+}
+
 a{
     cursor: pointer;
 }
 
 button:disabled{
     opacity: .5;
+}
+
+#container-primary-logedin{
+    width: 900px;
+    margin: auto;
+    height: 90vh;
+    overflow-y: auto;
+}
+
+.container-background-color{
+    background: $neutral-gray-light;
+    height: 100%;
 }

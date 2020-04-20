@@ -5,6 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './main/navbar/navbar.component';
 import { AuthGuard } from './auth/auth-guard.service';
+import { FormCheckingDirective } from './shared/form-checking.directive';
+import { RouterModule } from '@angular/router';
+import { HttpClientModule } from "@angular/common/http";
 
 
 @NgModule({
@@ -13,7 +16,8 @@ import { AuthGuard } from './auth/auth-guard.service';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,  
+    AppRoutingModule,
+    HttpClientModule,
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]

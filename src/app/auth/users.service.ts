@@ -8,8 +8,9 @@ import { User } from '../shared/user.model';
 export class UsersService {
   //offline version of logging in
   Users: User[] = [
-    new User('Kristián', 'Palovič', 19, 'kristian.palovic@spsjm.eu', '123456'),
-    new User('Janko', 'Hraško', 19, 'jano.hrasko@spsjm.eu', '123456'),
-    new User('Dušan', 'Mrkva', 19, 'dusan.mrkva@spsjm.eu', '123456'),
+    new User('Kristián', 'Palovič', 19, 'kristian.palovic@spsjm.eu', '12345678'),
+    new User('Janko', 'Hraško', 19, 'jano.hrasko@spsjm.eu', '12345678'),
+    new User('Dušan', 'Mrkva', 19, 'dusan.mrkva@spsjm.eu', '12345678'),
+    new User('Test', 'Test', 19, 't@t.t', '12345678'),
   ];
 }

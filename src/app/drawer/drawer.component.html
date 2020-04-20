@@ -1,27 +1,30 @@
 <nav id="drawer" #drawer>
-    <ul>
-        <li>
-            <a routerLink="/"><img src="../../assets/icons/landing_icon.png" alt=""></a>
-            <label>Domov</label>
+  <ul>
+    <li>
+      <a [routerLink]="[icons[0].navigation]" (click)="moveDrawer()">
+        <img [src]="icons[0].src" [alt]="icons[0].alt" />
+      </a>
+      <label>{{ icons[0].label }}</label>
+    </li>
+
+    <div class="apps">
+      <div *ngFor="let icon of icons; index as i">
+        <li *ngIf="i > 0">
+          <a [routerLink]="[icon.navigation]" (click)="moveDrawer()">
+            <img [src]="icon.src" [alt]="icon.alt" />
+          </a>
+          <label>{{ icon.label }}</label>
         </li>
-        <div class="apps">
-            <li>
-                <a href="#"><img src="../../assets/icons/chat_icon.png" alt=""></a>
-                <label>Chat-room</label>
-            </li>
-            <li>
-                <a href="#"><img src="../../assets/icons/notes_icon.png" alt=""></a>
-                <label>Poznámky</label>
-            </li>
-            <li>
-                <a href="#"><img src="../../assets/icons/calendar_icon.png" alt=""></a>
-                <label>Kalendár</label>
-            </li>
-        </div>
-    </ul>
-    <img src="../../assets/icons/play-icon.png" alt="" id="drawerTrigger" #drawerTriggerArrow
-     (click)="moveDrawer()">
-     
+      </div>
+    </div>
+  </ul>
+  <img
+    src="../../assets/icons/play-icon.png"
+    alt=""
+    id="drawerTrigger"
+    #drawerTriggerArrow
+    (click)="moveDrawer()"
+  />
 </nav>
 
 <div *ngIf="loaded" class="overlay"></div>

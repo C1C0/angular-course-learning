@@ -1,14 +1,46 @@
 <div class="loginForm">
   <form [formGroup]="changePassForm" (ngSubmit)="onSubmit()">
-    <label for="password">Nové heslo</label>
-    <input type="password" name="password" id="password" formControlName="password" />
-    <label for="password">Potvrď heslo</label>
+    <label
+      [appFormChecking]="changePassForm"
+      [formCheckingInputParam]="'password'"
+      for="password"
+      >Nové heslo</label
+    >
+    <div *ngIf="onGetError(changePassForm,'password')">
+      <p class="invalid">*Toto pole je povinné</p>
+      <p class="invalid">*Zadané heslo nespĺňa minimálne požiadavky</p>
+    </div>
+
+    <input
+      type="password"
+      name="password"
+      id="password"
+      formControlName="password"
+    />
+
+    <label
+      [appFormChecking]="changePassForm"
+      [formCheckingInputParam]="'checkPassword'"
+      for="password"
+      >Potvrď heslo</label
+    >
+    <div *ngIf="onGetError(changePassForm,'checkPassword')">
+      <p class="invalid">*Toto pole je povinné</p>
+      <p class="invalid">*Heslá sa nezhodujú</p>
+    </div>
+
     <input
       type="password"
       name="checkPassword"
       id="checkPassword"
       formControlName="checkPassword"
     />
-    <button type="submit" style="cursor: pointer;" [disabled]="changePassForm.invalid">Submit</button>
+    <button
+      type="submit"
+      style="cursor: pointer;"
+      [disabled]="changePassForm.invalid"
+    >
+      Submit
+    </button>
   </form>
 </div>

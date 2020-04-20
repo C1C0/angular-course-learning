@@ -1,21 +1,27 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FaqComponent } from './faq/faq.component';
-import { ProfileComponent } from '../profile/profile.component';
+import { ProfileComponent } from './profile/profile.component';
 import { MainComponent } from './main.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
-    {path: '', component: MainComponent},
-    {path: 'faq', component: FaqComponent},
-    {path: 'profile', component: ProfileComponent},
-]
+  // '' -> represents /user
+
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      { path: 'home', component: HomeComponent },
+      { path: 'faq', component: FaqComponent },
+      { path: 'profile', component: ProfileComponent },
+    ],
+  },
+];
 
 @NgModule({
-    imports:[
-        RouterModule.forChild(routes)
-    ],
-    exports: [
-        RouterModule
-    ]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
-export class MainRoutingModule{}
+export class MainRoutingModule {}
