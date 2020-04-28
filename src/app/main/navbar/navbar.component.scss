@@ -21,6 +21,10 @@ nav#static{
             right: 3rem;
         }
 
+        a{
+            color: $neutral-gray-light;
+        }
+
         li{
             list-style: none;
             width: fit-content;

@@ -1,8 +1,7 @@
 @import '../../assets/shared/variables.scss';
 
 footer{
-    position: absolute;
-    width: 100vw;
+    position: static;
     background: $base-shade;
     color: white;
     text-align: center;

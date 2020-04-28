@@ -1,12 +1,26 @@
 // colors
+$base-shade-bright: #9DE2F9;
 $base-color: #3DA8CC;
 $base-shade: #1F81A2;
 $accent-color: #FFA545;
 $accent-shade1:#FF921F;
+$accent-shade2: #FA8000;
 $neutral-gray-light: #F9FAFB;
+$neutral-gray-dark: #1A4950;
+
+//text
+$text-default : #424242;
 
 //shadows
-$default-darker-shadow: #3A495019;
+$default-darker-shadow: #00000013;
 
 // font 
 $font-size-nav: 1.5em;
+
+//calendar - filter
+$filter-color1 : #51d4ff;
+$filter-color2 : #828282;
+$filter-color3 : $accent-shade2;
+$cal-color1 : #51d4ff77;
+$cal-color2 : #82828277;
+$cal-color3 : #FA800077;

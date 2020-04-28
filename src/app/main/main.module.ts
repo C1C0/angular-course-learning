@@ -6,10 +6,8 @@ import { MainRoutingModule } from './main-routing.module';
 import { CommonModule } from '@angular/common';
 import { ProfileComponent } from './profile/profile.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { FormCheckingDirective } from '../shared/form-checking.directive';
-import { SharedModule } from '../shared/shared.module';
-import { RouterModule } from '@angular/router';
 import { DrawerComponent } from '../drawer/drawer.component';
+import { CalendarComponent } from './calendar/calendar.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +16,8 @@ import { DrawerComponent } from '../drawer/drawer.component';
     FaqComponent,
     ProfileComponent,
     NavbarComponent,
-    DrawerComponent
+    DrawerComponent,
+    CalendarComponent
   ],
   imports: [CommonModule, MainRoutingModule],
   exports: []

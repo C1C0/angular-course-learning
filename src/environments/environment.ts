@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  fetchUrl: "localhost:100/v01/"
+  fetchUrl: "http://192.168.1.40:35100/v01/"
 };
 
 /*

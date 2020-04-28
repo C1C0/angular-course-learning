@@ -1,2 +1,43 @@
-@import '../../../assets/shared/variables.scss';
+@import "../../../assets/shared/variables.scss";
 
+.gridHolder{
+    display:  grid;
+    grid-template-columns: 23% auto 23%;
+    height: 83.7vh;
+
+    #container-primary-logedin.faqContent {
+      height: 83.7vh;
+        .container-background-color {
+          overflow: hidden;
+          overflow-y: scroll;
+      
+          .faqHolder {
+            width: 90%;
+            margin: 2rem auto;
+      
+            h2 {
+              color: $base-color;
+            }
+            p {
+              text-align: justify;
+            }
+          }
+        }
+      }
+      
+      .toc {
+        text-align: center;
+        color: $neutral-gray-dark;
+        height: inherit;
+        overflow: hidden;
+        overflow-y: scroll ;
+        h1{
+            margin: 2rem 0;
+        }
+        a{
+            display: block;
+            margin-bottom: 1rem;
+        }
+      }
+      
+}

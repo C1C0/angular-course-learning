@@ -1,3 +1,17 @@
-<div class="container-background-color">
-    <p>ahoj</p>
+<div class="gridHolder">
+    <div></div>
+    <div id="container-primary-logedin" class="faqContent">
+        <div class="container-background-color">
+          <div *ngFor="let faq of faqs" class="faqHolder" [id]="faq.title | lowercase">
+            <h2>{{ faq.title }}</h2>
+            <p>{{ faq.description }}</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="toc">
+        <h1>Obsah:</h1>
+        <a [href]="'user/faq#'+faq.title | lowercase" *ngFor="let faq of faqs">{{ faq.title }}</a>
+      </div>
+      
 </div>

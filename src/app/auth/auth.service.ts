@@ -1,80 +1,112 @@
 import { Injectable } from '@angular/core';
 
-import { User } from '../shared/user.model';
-import { UsersService } from './users.service';
+import { Student } from '../shared/student.model';
 import { LocalStorageService } from '../shared/local-storage.service';
-import { BehaviorSubject } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { take, catchError} from 'rxjs/operators';
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse,
+} from '@angular/common/http';
+import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   //user instance - represents logged in user
-  user = new BehaviorSubject<User>(null);
+  student = new BehaviorSubject<Student>(null);
 
   constructor(
-    private UsersService: UsersService,
     private lss: LocalStorageService,
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) {}
 
-  //get all users from offline version and checks credentials
-  //if true, emits uesr and sets local storage
-  login(credentials: { email: string; password: string }) {
-    for (let user of this.UsersService.Users) {
-      if (
-        credentials.email === user.email &&
-        credentials.password === user.password
-      ) {
-        this.user.next(user);
+  getStudent():Observable<any>{
+    return this.student.pipe(take(1));
+  }
 
-        if (user.passwordChanged) {
-          this.lss.setToLS(this.lss.userData, user);
-        }
-        this.http.get('http://192.168.1.40:35100/').subscribe(data => {
-          console.log(data);
-        });
-        return false;
-      }
+
+  //sends HTTP GET request to server
+  //if all headers are valid, return user full user
+  login(credentials: { email: string; password: string }): Observable<Student> {
+    return this.http
+      .get<Student>(environment.fetchUrl+ "student", {
+        headers: new HttpHeaders()
+          .set('email', credentials.email)
+          .set('password', credentials.password),
+      }).pipe(
+        catchError(this.handleError)
+      );
+
+  }
+
+  private handleError(error: HttpErrorResponse){
+    if(error.error instanceof ErrorEvent){
+      //client side error
+      console.error("an error occurred: ", error.error.message);
+    }else{
+      //unsuccessful response code from backend
+      console.error(
+        `Backend returned code ${error.status}`,
+        `body was:`, error.error
+      )
     }
-    return true;
-
-    
+    //return an observable with a user-facing error message
+    return throwError("error")
   }
 
   //we just set null user
   //data are stored on API
   logout() {
-    this.lss.removeFromLS(this.lss.userData);
-    this.user.next(null);
+    this.lss.clear();
+    this.student.next(null);
   }
 
   //gets data from LS and then emit to this.user
   autoLogin() {
-    let userData: User = this.lss.getLS(this.lss.userData);
+    //get data from storage
+    let student: Student = this.lss.getLS(this.lss.userData);
 
-    if (!userData) {
+    //if user there, automatically update student: Beh.Sub
+    if (!student) {
       return;
     } else {
-      this.user.next(userData);
+      this.student.next(student);
     }
   }
 
   changePass(p1: string, p2: string) {
     if (p1 === p2) {
-      this.user.pipe(take(1)).subscribe((user) => {
-        user.passwordChanged = true;
-        user.password = p1;
+      this.student.pipe(take(1)).subscribe((student) => {
+        student.password_changed = true;
 
-        this.lss.setToLS(this.lss.userData, user);
+        console.log(student);
 
-        this.user.next(user);
-        //to continue to next page
+        this.http
+          .put<Student>(
+            environment.fetchUrl+'student/edit',
+            {
+              student:{
+                password: p1,
+                password_confirmation: p2,
+              }
+            }
+          )
+          .subscribe((student) => {
+            console.log(student);
+
+            //creates instance in local storage, to allow auto-login
+            this.lss.setToLS(this.lss.userData, student);
+
+            this.student.next(student);
+            //to continue to next page
+            this.router.navigate(['/user/home']);
+          });
       });
-
-      return true;
     }
   }
 }

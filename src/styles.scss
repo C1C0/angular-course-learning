@@ -1,35 +1,60 @@
-@import './assets/shared/variables.scss';
+@import "./assets/shared/variables.scss";
 
-@font-face{
-    font-family: open-sans;
-    src:url('/src/assets/fonts/OpenSans-Regular.ttf')
+@font-face {
+  font-family: open-sans;
+  src: url("/src/assets/fonts/OpenSans-Regular.ttf");
 }
 
-*{
-    font-family: 'Open Sans', sans-serif;
-    margin: 0;
+* {
+  font-family: "Open Sans", sans-serif;
+  margin: 0;
 }
 
 body{
-    overflow: hidden;
+  overflow: hidden;
+  overflow-y: auto;
 }
 
-a{
-    cursor: pointer;
+a {
+  cursor: pointer;
+  color: $neutral-gray-dark;
+  text-decoration: none;
+}
+a:hover{
+  transition: 100ms ease-in-out;
+  transform: scale(1.1);
 }
 
-button:disabled{
-    opacity: .5;
+button:disabled {
+  opacity: 0.5;
 }
 
-#container-primary-logedin{
-    width: 900px;
-    margin: auto;
-    height: 90vh;
-    overflow-y: auto;
+#container-primary-logedin {
+  width: 900px;
+  margin: 0 auto;
+  height: 86.7vh;
+  overflow-y: auto;
 }
 
-.container-background-color{
-    background: $neutral-gray-light;
-    height: 100%;
+.container-background-color {
+  background: $neutral-gray-light;
+  height: 100%;
+}
+
+// scrollbar
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ebebeb;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #828282;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3b3b3b;
 }

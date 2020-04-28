@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from './user.model';
+import { Student } from './student.model';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +9,7 @@ export class LocalStorageService {
   userData: string = 'userData';
 
   //get data from local storage
-  getLS(itemName: string): User {
+  getLS(itemName: string): Student {
     return JSON.parse(localStorage.getItem(itemName));
   }
 
@@ -23,5 +23,10 @@ export class LocalStorageService {
     if (this.getLS(itemName)) {
       localStorage.removeItem(itemName);
     }
+  }
+
+  //clear whole localStorage
+  clear(){
+    localStorage.clear();
   }
 }

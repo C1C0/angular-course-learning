@@ -1,0 +1,118 @@
+@import "../../../assets/shared/variables.scss";
+
+#container-primary-logedin.calendar {
+  width: 100vw;
+  height: fit-content;
+  display: flex;
+  flex-direction: row;
+
+//   calendar itself
+  .container-days {
+    border: 1px solid red;
+    margin-top: 2rem;
+    width: 87vw;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .day{
+        border-right: 1px solid $default-darker-shadow;
+        hr{
+           border: 1px solid $default-darker-shadow;
+           border-radius: 2px;
+        }
+        .date{
+            font-size: 30px;
+            color: $text-default;
+            text-align: center;
+        }
+        .events{
+            .classroom, .timetable, .personal{
+                p{
+                    border-radius: 10px;
+                    padding: .3rem;
+                    width: 172px;
+                    margin-bottom: .3rem;
+                }
+                p:nth-child(1){
+                    margin-top: .3rem;
+                }   
+
+            }
+           .classroom > p{
+                background: $cal-color1;
+           }
+           .timetable > p{
+                background: $cal-color2;
+           }
+           .personal > p{
+            background: $cal-color3;
+           }
+        }
+    }
+
+  }
+
+  //   filter
+  .container-options {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 10fr;
+    background-color: $default-darker-shadow;
+    text-align: center;
+    width: 13vw;
+    height: 87.3vh;
+
+    // all boxes have same width
+    rect {
+      stroke-width: 2px;
+    }
+
+    .filterOptionHolder {
+      margin-top: 2rem;
+      p {
+        font-size: 1.042vw;
+      }
+    }
+
+    .triednyKalendar {
+      p {
+        color: $filter-color1;
+      }
+      rect {
+        stroke: $filter-color1;
+      }
+    }
+    .rozvrh {
+      p {
+        color: $filter-color2;
+      }
+      rect {
+        stroke: $filter-color2;
+      }
+    }
+    .tvojKalendar {
+      p {
+        color: $filter-color3;
+      }
+      rect {
+        stroke: $filter-color3;
+      }
+    }
+
+    .addEvent {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      color: $base-color;
+      margin-bottom: 2rem;
+      font-size: 1.042vw;
+
+      svg {
+        margin-top: 0.5rem;
+        transform: rotate(45deg);
+        transform: scale(1.3);
+      }
+    }
+  }
+}

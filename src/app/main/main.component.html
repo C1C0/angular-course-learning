@@ -1,6 +1,5 @@
 <app-navbar></app-navbar>
 <app-drawer></app-drawer>
-<div id="container-primary-logedin">
-    <router-outlet (activate)="onActivate($event)"></router-outlet>
-</div>
+<router-outlet (activate)="onActivate($event)"></router-outlet>
+
 <footer *ngIf="faqLoaded">&nbsp;&copy;&nbsp;Kristián&nbsp;Palovič&nbsp;&nbsp;&nbsp;2019&nbsp;-&nbsp;2020</footer>

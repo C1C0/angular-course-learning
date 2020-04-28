@@ -9,10 +9,12 @@ import {
 import { AuthService } from '../auth/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { take } from 'rxjs/operators';
+import { take, catchError } from 'rxjs/operators';
 import { FormCheckingService } from './form-checking.service';
-import { isNull } from 'util';
-import { Subscription } from 'rxjs';
+import { Subscription, throwError } from 'rxjs';
+import { LocalStorageService } from '../shared/local-storage.service';
+import { error } from '@angular/compiler/src/util';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +32,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private formCheck: FormCheckingService
+    private formCheck: FormCheckingService,
+    private lss: LocalStorageService
   ) {}
 
   ngOnInit(): void {
@@ -38,7 +41,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     //if is user logged in and would like to visit this /login,
     //this will prevent it and redirects user  back to /home
-    this.authUserSubs = this.authService.user
+    this.authUserSubs = this.authService.student
       .pipe(take(1))
       .subscribe((user) => {
         if (user) {
@@ -52,18 +55,36 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onLogIn(): void {
-    this.invalidCredentials = this.authService.login(this.loginForm.value);
-    this.authService.user.pipe(take(1)).subscribe((user) => {
-      //sets state of app to change password
-      if (user) {
-        this.initLogin = !user.passwordChanged;
-        if (!this.initLogin) {
-          //nav to /home, if not init login
-          this.router.navigate(['/user/home']);
+    //! TODO this.ivalidCredentials
+    this.authService
+      .login(this.loginForm.value)
+      .subscribe(student => {
+        console.log(student);
+        //sets state of app to change password
+        if (student) {
+          //pass new student into student: BehaviourSubject
+          this.authService.student.next(student);
+
+          //If first log in, this.initLogin = true
+          this.initLogin = !student.password_changed;
+
+          //set to LS
+          this.lss.setToLS(this.lss.userData, student);
+          if (!this.initLogin) {
+            //nav to /home, if not init login
+            this.router.navigate(['/user/home']);
+          }
+
+          //if was true before, makes sure to switch it to false
+          this.invalidCredentials = false;
+        }},
+        error => {
+          //for displaying, that invalid credentials were set
+          this.invalidCredentials = true;
         }
-      }
-    });
+      );
   }
+
 
   //handling error service
   onGetError(form: FormGroup, property: string) {
@@ -78,7 +99,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       }),
       password: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(8)],
-        updateOn: 'blur'
+        updateOn: 'change',
       }),
     });
   }

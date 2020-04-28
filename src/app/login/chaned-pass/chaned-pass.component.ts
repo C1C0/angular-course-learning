@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { FormCheckingService } from '../form-checking.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chaned-pass',
@@ -41,6 +42,11 @@ export class ChanedPassComponent implements OnInit {
         updateOn: 'blur',
       }),
     });
+
+    //testing user
+    this.authService.student.pipe(take(1)).subscribe((user)=>{
+      console.log(user);
+    })
   }
 
   //handling error service
@@ -63,13 +69,9 @@ export class ChanedPassComponent implements OnInit {
   }
 
   onSubmit() {
-    //docasne riesenie
-    //kym nebude API
     let p1: string = this.changePassForm.get('password').value;
     let p2: string = this.changePassForm.get('checkPassword').value;
 
-    if (this.authService.changePass(p1, p2)) {
-      this.router.navigate(['/user/home']);
-    }
+    this.authService.changePass(p1, p2)
   }
 }
