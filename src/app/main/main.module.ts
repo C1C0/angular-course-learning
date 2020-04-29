@@ -8,6 +8,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { DrawerComponent } from '../drawer/drawer.component';
 import { CalendarComponent } from './calendar/calendar.component';
+import { AddComponent } from './calendar/add/add.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,9 +19,10 @@ import { CalendarComponent } from './calendar/calendar.component';
     ProfileComponent,
     NavbarComponent,
     DrawerComponent,
-    CalendarComponent
+    CalendarComponent,
+    AddComponent
   ],
-  imports: [CommonModule, MainRoutingModule],
+  imports: [CommonModule, MainRoutingModule, ReactiveFormsModule],
   exports: []
 })
 export class MainModule {}

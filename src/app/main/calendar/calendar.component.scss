@@ -6,52 +6,78 @@
   display: flex;
   flex-direction: row;
 
-//   calendar itself
+  //   calendar itself
   .container-days {
-    border: 1px solid red;
     margin-top: 2rem;
-    width: 87vw;
+    width: 88vw;
 
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
 
-    .day{
-        border-right: 1px solid $default-darker-shadow;
-        hr{
-           border: 1px solid $default-darker-shadow;
-           border-radius: 2px;
-        }
-        .date{
-            font-size: 30px;
-            color: $text-default;
-            text-align: center;
-        }
-        .events{
-            .classroom, .timetable, .personal{
-                p{
-                    border-radius: 10px;
-                    padding: .3rem;
-                    width: 172px;
-                    margin-bottom: .3rem;
-                }
-                p:nth-child(1){
-                    margin-top: .3rem;
-                }   
+    .dayHolder {
+      display: flex;
 
+      .vl {
+        right: 0;
+        top: 0;
+        background: $neutral-gray-light;
+        width: 2px;
+      }
+
+      .day {
+        padding: 1vmax;
+
+        hr {
+          border: 1px solid $default-darker-shadow;
+          border-radius: 2px;
+        }
+        .date {
+          font-size: 30px;
+          color: $text-default;
+          text-align: center;
+        }
+        .events {
+          .classroom,
+          .timetable,
+          .personal {
+            p {
+              border-radius: 10px;
+              padding: 0.3rem;
+              width: 172px;
+              margin-bottom: 0.3rem;
             }
-           .classroom > p{
-                background: $cal-color1;
-           }
-           .timetable > p{
-                background: $cal-color2;
-           }
-           .personal > p{
+            p:nth-child(1) {
+              margin-top: 0.3rem;
+            }
+          }
+          .classroom > p {
+            background: $cal-color1;
+          }
+          .timetable > p {
+            background: $cal-color2;
+          }
+          .personal > p {
             background: $cal-color3;
-           }
+          }
         }
+      }
     }
+  }
 
+  .arrow>p{
+    margin-top: 1rem;
+    color: $text-default;
+    font-weight: bolder;
+    font-size: 2em;
+    cursor: pointer;
+    user-select: none;;
+
+    &:hover{
+      transition: 100ms ease-in-out;
+      text-shadow: 2px 3px 0 $hover-shadow;
+      transform: translateY(-3px);
+    }
   }
 
   //   filter
@@ -60,12 +86,13 @@
     grid-template-rows: 1fr 1fr 1fr 10fr;
     background-color: $default-darker-shadow;
     text-align: center;
-    width: 13vw;
+    width: 12vw;
     height: 87.3vh;
 
     // all boxes have same width
     rect {
       stroke-width: 2px;
+      cursor: pointer;
     }
 
     .filterOptionHolder {
@@ -107,6 +134,10 @@
       color: $base-color;
       margin-bottom: 2rem;
       font-size: 1.042vw;
+
+      div {
+        cursor: pointer;
+      }
 
       svg {
         margin-top: 0.5rem;

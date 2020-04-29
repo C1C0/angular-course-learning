@@ -1,33 +1,36 @@
 <div id="container-primary-logedin" class="calendar">
+  <app-add *ngIf="addItem" (closed)="onAddItem()"></app-add>
   <div class="container-days">
     <div class="arrow">
-        <
+      <p><</p>
     </div>
-    <div class="day" *ngFor="let day of calendar">
+    <div class="dayHolder" *ngFor="let day of viewCalendar">
+      <div class="day">
         <div class="date">
-            <p>{{day.showDate}}</p>
+          <p>{{ day.showDate }}</p>
         </div>
         <div class="events">
-            <div class="classroom">
-                <p *ngFor="let classEvent of day.classroomEvents">
-                    {{classEvent.title}}
-                </p>
-            </div>
-            <hr>
-            <div class="timetable">
-            </div>
-            <hr>
-            <div class="personal">
-              <p *ngFor="let personalEvent of day.personalEvents">
-                {{personalEvent.title}}
+          <div class="classroom" *ngIf="classCalVisility">
+            <p *ngFor="let classEvent of day.classroomEvents">
+              {{ classEvent.title }}
             </p>
-            </div>
+          </div>
+          <hr />
+          <div class="timetable" *ngIf="timetableVisibility"></div>
+          <hr />
+          <div class="personal" *ngIf="personalCalVisibility">
+            <p *ngFor="let personalEvent of day.personalEvents">
+              {{ personalEvent.title }}
+            </p>
+          </div>
         </div>
-    </div>
-    <div class="arrow">
-        >
+      </div>
+      <div class="vl" #vl></div>
     </div>
 
+    <div class="arrow">
+      <p>></p>
+    </div>
   </div>
   <div class="container-options">
     <div
@@ -35,14 +38,26 @@
       [class]="'filterOptionHolder ' + filter.class"
     >
       <p>{{ filter.name }}</p>
-      <svg width="30" height="30">
+      <svg width="30" height="30" (click)="onChangeVisibility(filter.changeVisibilityOf)">
         <rect width="30" height="30" style="fill: white;" />
       </svg>
     </div>
     <div class="addEvent">
-      <div>
-          <p>Pridať udalosť</p>
-          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M14.59 8L12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41 14.59 8zM12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="#3DA8CC"/></svg>
+      <div (click)="onAddItem()">
+        <p>Pridať udalosť</p>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24"
+          viewBox="0 0 24 24"
+          width="24"
+        >
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path
+            d="M14.59 8L12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41 14.59 8zM12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+            fill="#3DA8CC"
+          />
+        </svg>
+      </div>
     </div>
   </div>
 </div>
