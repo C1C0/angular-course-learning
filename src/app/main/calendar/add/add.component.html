@@ -1,0 +1,27 @@
+<div class="overlay">
+  <div class="addEventHolder">
+    <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+        <button class="clear" type="button" (click)="onClose()">X</button>
+      <input type="text" placeholder="Názov" id="title" formControlName="title"/>
+
+      <div class="times">
+        <div class="fromHolder">
+          <label for="from">Od</label>
+          <input type="date" name="from" id="from" class="typicalInput" formControlName="from" />
+        </div>
+        <div class="optionHolder">
+          <label for="from">Kalendár</label>
+          <select type="select" name="from" id="from" class="typicalInput" formControlName="calendar" >
+              <option value="classroom" (click)="onChangeColor('primary')">Triedny</option>
+              <option value="personal" (click)="onChangeColor('secondary')">Osobný</option>
+          </select>
+        </div>
+        <div class="toHolder">
+          <label for="to">Do</label>
+          <input type="date" name="to" id="to" class="typicalInput" formControlName="to" />
+        </div>
+      </div>
+      <button type="submit" class="typicalInput">Uložiť</button>
+    </form>
+  </div>
+</div>
