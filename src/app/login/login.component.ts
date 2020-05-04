@@ -55,7 +55,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onLogIn(): void {
-    //! TODO this.ivalidCredentials
     this.authService
       .login(this.loginForm.value)
       .subscribe(student => {

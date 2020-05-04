@@ -23,13 +23,22 @@ export class CalendarService {
 
   constructor(private http: HttpClient) {}
 
-  dates(up_to = 7, startingDay = null) {
-    let from = startingDay
-      ? new Date(startingDay).toISOString()
-      : new Date().toISOString();
-    let to = new Date(
-      new Date().getTime() + (up_to - 1) * 24 * 60 * 60 * 1000
-    ).toISOString();
+  dates(up_to = 7, startingDay = null, shiftWeek = 0) {
+    let from, to;
+    let day = 24 * 60 * 60 * 1000;
+
+    if (startingDay) {
+      from = new Date(
+        startingDay.getTime() + shiftWeek * 7 * day
+      ).toISOString();
+      to = new Date(
+        startingDay.getTime() + (up_to - 1) * day + shiftWeek * 7 * day
+      ).toISOString();
+    } else {
+      from = new Date().toISOString();
+      to = new Date(new Date().getTime() + (up_to - 1) * day).toISOString();
+    }
+
     return { from, to };
   }
 
@@ -80,15 +89,30 @@ export class CalendarService {
     });
   }
 
+  destroyEvent(personalCal: boolean, student: Student, eventId:number): Observable<any> {
+    let setUri =
+      personalCal === true
+        ? `student/calendar/${eventId}`
+        : `student_classes/${student.student_class_id}/calendar/${eventId}`;
+    return this.http.delete(environment.fetchUrl + setUri);
+  }
+
   //UI of calendar
 
-  createCalendar(startingDay = null, nDays: number = 7) {
+  createCalendar(startingDay = null, nDays: number = 7, shiftWeek = 0) {
     let calendar: Calendar[] = [];
 
+    let createDate = new Date(
+      startingDay.getTime() + shiftWeek * 7 * 24 * 60 * 60 * 1000
+    );
+
     if (startingDay === null) {
+      //to switch calendar type
+      //show from actual day
       startingDay = new Date();
     } else {
-      startingDay = new Date(startingDay);
+      //set calendar to actual week from monday to sunday
+      startingDay = new Date(createDate);
     }
 
     for (let i = 0; nDays > i; i++) {
@@ -97,7 +121,6 @@ export class CalendarService {
       }
 
       let ISO = startingDay.toISOString();
-
 
       calendar.push({
         showDate: `${startingDay.getDate()}.${
@@ -127,7 +150,7 @@ export class CalendarService {
   addEvent(form: FormGroup) {
     //gets correct date format (only days for now)
     let AddToDay = new Date(form.get('from').value).toDateString();
-    this.calendar.pipe(take(1)).subscribe((cal:Calendar[]) => {
+    this.calendar.pipe(take(1)).subscribe((cal: Calendar[]) => {
       cal.forEach((day) => {
         if (new Date(day.compareDate).toDateString() === AddToDay) {
           if (form.get('calendar').value === 'personal') {

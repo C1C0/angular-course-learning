@@ -41,23 +41,62 @@
           .classroom,
           .timetable,
           .personal {
-            p {
+            .eventHolder {
+              display: flex;
+              flex-direction: row;
+              position: relative;
+              justify-content: space-between;
+              align-items: center;
+
               border-radius: 10px;
               padding: 0.3rem;
-              width: 172px;
+              width: 160px;
               margin-bottom: 0.3rem;
+
+              cursor: pointer;
+
+              .delete {
+                display: none;
+                color: $neutral-gray-dark;
+
+                border: 2px solid $neutral-gray-dark;
+                border-radius: 50px;
+
+                height: fit-content;
+                width: auto;
+
+                margin: 5px;
+
+                cursor: pointer;
+                
+                p{
+                  padding: 3px 6px;
+                  font-size: .6em;
+                  font-weight: bold;
+                }
+              }
+
+              &.active{
+                transition: 100ms ease-in-out;
+                transform: translateY(-6px);
+                box-shadow: 2px 6px 0 $default-darker-shadow;
+
+                .delete{
+                  display: block;
+                }
+              }
             }
-            p:nth-child(1) {
+            .eventHolder:nth-child(1) {
               margin-top: 0.3rem;
             }
           }
-          .classroom > p {
+          .classroom > .eventHolder {
             background: $cal-color1;
           }
-          .timetable > p {
+          .timetable > .eventHolder {
             background: $cal-color2;
           }
-          .personal > p {
+          .personal > .eventHolder {
             background: $cal-color3;
           }
         }
@@ -65,15 +104,15 @@
     }
   }
 
-  .arrow>p{
+  .arrow > p {
     margin-top: 1rem;
     color: $text-default;
     font-weight: bolder;
     font-size: 2em;
     cursor: pointer;
-    user-select: none;;
+    user-select: none;
 
-    &:hover{
+    &:hover {
       transition: 100ms ease-in-out;
       text-shadow: 2px 3px 0 $hover-shadow;
       transform: translateY(-3px);
@@ -90,7 +129,7 @@
     height: 87.3vh;
 
     // all boxes have same width
-    rect {
+    rect, .checkMark {
       stroke-width: 2px;
       cursor: pointer;
     }
@@ -103,11 +142,14 @@
     }
 
     .triednyKalendar {
-      p {
+      p{
         color: $filter-color1;
       }
       rect {
         stroke: $filter-color1;
+      }
+      .checkMark{
+        fill: $filter-color1;
       }
     }
     .rozvrh {
@@ -117,6 +159,9 @@
       rect {
         stroke: $filter-color2;
       }
+      .checkMark{
+        fill: $filter-color2;
+      }
     }
     .tvojKalendar {
       p {
@@ -124,6 +169,9 @@
       }
       rect {
         stroke: $filter-color3;
+      }
+      .checkMark{
+        fill: $filter-color3;
       }
     }
 

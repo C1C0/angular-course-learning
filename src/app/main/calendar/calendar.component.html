@@ -1,8 +1,8 @@
 <div id="container-primary-logedin" class="calendar">
   <app-add *ngIf="addItem" (closed)="onAddItem()"></app-add>
-  <div class="container-days">
+  <div class="container-days" (click)="onSelectEvent($event)">
     <div class="arrow">
-      <p><</p>
+      <p (click)="onPreviousWeek()"><</p>
     </div>
     <div class="dayHolder" *ngFor="let day of viewCalendar">
       <div class="day">
@@ -11,17 +11,33 @@
         </div>
         <div class="events">
           <div class="classroom" *ngIf="classCalVisility">
-            <p *ngFor="let classEvent of day.classroomEvents">
-              {{ classEvent.title }}
-            </p>
+            <div
+              class="eventHolder"
+              [id]="'classroomE-'+classEvent.id"
+              *ngFor="let classEvent of day.classroomEvents"
+              [ngClass]="{'active': 'classroomE-'+classEvent.id==showActive}"
+            >
+              <p>
+                {{ classEvent.title }}
+              </p>
+              <div class="delete" (click)="onDestroyEvent($event)"><p>X</p></div>
+            </div>
           </div>
           <hr />
           <div class="timetable" *ngIf="timetableVisibility"></div>
           <hr />
           <div class="personal" *ngIf="personalCalVisibility">
-            <p *ngFor="let personalEvent of day.personalEvents">
-              {{ personalEvent.title }}
-            </p>
+            <div
+              class="eventHolder"
+              [id]="'personalE-'+personalEvent.id"
+              *ngFor="let personalEvent of day.personalEvents"
+              [ngClass]="{'active': 'personalE-'+personalEvent.id==showActive}"
+            >
+              <p>
+                {{ personalEvent.title }}
+              </p>
+              <div class="delete" (click)="onDestroyEvent($event)"><p>X</p></div>
+            </div>
           </div>
         </div>
       </div>
@@ -29,7 +45,7 @@
     </div>
 
     <div class="arrow">
-      <p>></p>
+      <p (click)="onNextWeek()">></p>
     </div>
   </div>
   <div class="container-options">
@@ -38,8 +54,13 @@
       [class]="'filterOptionHolder ' + filter.class"
     >
       <p>{{ filter.name }}</p>
-      <svg width="30" height="30" (click)="onChangeVisibility(filter.changeVisibilityOf)">
+      <svg
+        width="30"
+        height="30"
+        (click)="onChangeVisibility(filter.changeVisibilityOf)"
+      >
         <rect width="30" height="30" style="fill: white;" />
+        <path #checkMark class="checkMark" d="M10.909,20.946,5.277,14.866,3.4,16.893,10.909,25,27,7.627,25.123,5.6Z"/>
       </svg>
     </div>
     <div class="addEvent">

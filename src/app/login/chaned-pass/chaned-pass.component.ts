@@ -42,11 +42,6 @@ export class ChanedPassComponent implements OnInit {
         updateOn: 'blur',
       }),
     });
-
-    //testing user
-    this.authService.student.pipe(take(1)).subscribe((user)=>{
-      console.log(user);
-    })
   }
 
   //handling error service

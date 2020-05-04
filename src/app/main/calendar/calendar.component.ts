@@ -15,6 +15,7 @@ import { Student } from 'src/app/shared/student.model';
 import { AuthService } from 'src/app/auth/auth.service';
 import { CalendarService, Calendar } from './calendar.service';
 import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-calendar',
@@ -25,6 +26,8 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
   student: Student;
   initDates;
   addItem = false;
+
+  shiftWeek = 0;
 
   viewCalendar: Calendar[] = [];
   viewCalendarSubs: Subscription;
@@ -37,6 +40,8 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
   timetableVisibility: boolean = true;
 
   @ViewChildren('vl') vls: QueryList<any>;
+  @ViewChildren('checkMark') checkMarks: QueryList<any>;
+  showActive;
 
   filters = [
     {
@@ -66,9 +71,9 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
     this.setMain(this.calendarService.getMonday(), 7);
   }
 
-  setMain(startingDay = null, nDays):void{
+  setMain(startingDay = null, nDays, shiftWeek = 0): void {
     //creates calendars days
-    this.calendarService.createCalendar(startingDay, nDays);
+    this.calendarService.createCalendar(startingDay, nDays, shiftWeek);
 
     //gets actual user for correct API requests
     this.authService.getStudent().subscribe((student) => {
@@ -76,7 +81,8 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
       //sets days from - to
       this.initDates = this.calendarService.dates(
         7,
-        this.calendarService.getMonday()
+        this.calendarService.getMonday(),
+        shiftWeek
       );
 
       //get and sort classroom events
@@ -100,12 +106,14 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
       //get and sort PERSONAL events
+      console.log('init dates', this.initDates);
       this.calendarService
         .getPersonalEvents(this.student, this.initDates)
         .subscribe((events) => {
           this.personalCalendarSubs = this.calendarService.calendar.subscribe(
             (cal) => {
               cal.forEach((day) => {
+                console.log('eventty', events);
                 events.forEach((serverEvent) => {
                   if (
                     serverEvent.date_from.split('T')[0] ===
@@ -123,9 +131,18 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
     this.viewCalendarSubs = this.calendarService.calendar.subscribe(
       (cal) => (this.viewCalendar = cal)
     );
+
+    console.log('calnedar', this.viewCalendar);
   }
 
+  //i did not figure it out, how to hide last one
   ngAfterViewInit(): void {
+    this.renderer.setStyle(this.vls.last.nativeElement, 'display', 'none');
+  }
+
+  resetPipes() {
+    //!TODO
+    // this.vls = new ViewChildren('vl')
     this.renderer.setStyle(this.vls.last.nativeElement, 'display', 'none');
   }
 
@@ -135,6 +152,10 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
 
   //prevents stacking already loaded events
   ngOnDestroy(): void {
+    this.resetSubs();
+  }
+
+  resetSubs() {
     this.calendarService.calendar.next([]);
     this.viewCalendar = [];
     this.viewCalendarSubs.unsubscribe();
@@ -152,18 +173,109 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
     switch (option) {
       case 1:
         this.classCalVisility = !this.classCalVisility;
+        this.setCheckmark(this.classCalVisility, option)
         break;
       case 2:
         this.timetableVisibility = !this.timetableVisibility;
+        this.setCheckmark(this.timetableVisibility, option)
         break;
       case 3:
         this.personalCalVisibility = !this.personalCalVisibility;
+        this.setCheckmark(this.personalCalVisibility, option)
         break;
+    }
+    console.log(this.checkMarks);
+
+  }
+
+  setCheckmark(calType: boolean, option: number){
+    if (!calType) {
+      this.renderer.setStyle(
+        this.checkMarks.find((e, index) => {
+          return index === option - 1;
+        }).nativeElement,
+        'display',
+        'none'
+      );
+    }else{
+      this.renderer.setStyle(
+        this.checkMarks.find((e, index) => {
+          return index === option - 1;
+        }).nativeElement,
+        'display',
+        'inline'
+      );
     }
   }
 
-  //changing week
-  onPreviousWeek(){
+  //changing weeks
+  onPreviousWeek() {
+    this.shiftWeek--;
+    this.resetSubs();
+    this.setMain(this.calendarService.getMonday(), 7, this.shiftWeek);
+  }
 
+  onNextWeek() {
+    this.shiftWeek++;
+    this.resetSubs();
+    this.setMain(this.calendarService.getMonday(), 7, this.shiftWeek);
+  }
+
+  //manage events
+  onSelectEvent(event) {
+    let chooseTarget;
+    if (event.target.tagName != 'DIV') {
+      chooseTarget = event.target.parentElement.id;
+    } else {
+      chooseTarget = event.target.id;
+    }
+
+    this.showActive = this.showActive ? null : chooseTarget;
+  }
+
+  resume(event) {
+    console.log(event.target.className);
+    if (this.showActive != null) {
+      this.showActive = null;
+    }
+  }
+
+  onDestroyEvent(event) {
+    let idOfEvent = event.target.parentElement.parentElement.id.split('-');
+    let personalE = idOfEvent[0] === 'personalE' ? true : false;
+    this.calendarService.calendar.pipe(take(1)).subscribe((cal: Calendar[]) => {
+      if (personalE) {
+        cal.forEach((day) => {
+          day.personalEvents.forEach((e) => {
+            if (e.id == idOfEvent[1]) {
+              day.personalEvents.splice(
+                day.personalEvents.findIndex((e) => {
+                  return e.id == idOfEvent[1];
+                }),
+                1
+              );
+            }
+          });
+        });
+      } else {
+        cal.forEach((day) => {
+          day.classroomEvents.forEach((e) => {
+            if (e.id == idOfEvent[1]) {
+              day.classroomEvents.splice(
+                day.classroomEvents.findIndex((e) => {
+                  return e.id == idOfEvent[1];
+                }),
+                1
+              );
+            }
+          });
+        });
+      }
+    });
+    this.calendarService
+      .destroyEvent(personalE, this.student, idOfEvent[1])
+      .subscribe((err) => {
+        console.log(err);
+      });
   }
 }
