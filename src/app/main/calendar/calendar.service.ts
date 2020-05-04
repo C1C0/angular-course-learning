@@ -147,16 +147,22 @@ export class CalendarService {
     return new Date(currentdate.setDate(diff));
   }
 
-  addEvent(form: FormGroup) {
+  addEvent(form: FormGroup, id: number) {
     //gets correct date format (only days for now)
+    console.log(form);
+    let newEvent = {
+      id: id,
+      ...form.value
+    }
+    console.log(newEvent);
     let AddToDay = new Date(form.get('from').value).toDateString();
     this.calendar.pipe(take(1)).subscribe((cal: Calendar[]) => {
       cal.forEach((day) => {
         if (new Date(day.compareDate).toDateString() === AddToDay) {
           if (form.get('calendar').value === 'personal') {
-            day.personalEvents.push(form.value);
+            day.personalEvents.push(newEvent);
           } else {
-            day.classroomEvents.push(form.value);
+            day.classroomEvents.push(newEvent);
           }
         }
       });
