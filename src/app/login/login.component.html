@@ -39,13 +39,17 @@
       </div>
       
 
-      <input
-        type="password"
+      <div class="passwordHolder">
+        <input
+        [type]="password_type"
         name="password"
         id="password"
         class="typicalInput" 
         formControlName="password"
       />
+      <button class="showPass" type="button" (click)="onChangePassType($event)"></button>
+      </div>
+
       <button
         type="submit"
         style="cursor: pointer;"

@@ -6,18 +6,25 @@
       for="password"
       >Nové heslo</label
     >
-    <div *ngIf="onGetError(changePassForm,'password')">
+    <div *ngIf="onGetError(changePassForm, 'password')">
       <p class="invalid">*Toto pole je povinné</p>
       <p class="invalid">*Zadané heslo nespĺňa minimálne požiadavky</p>
     </div>
 
-    <input
-      type="password"
-      name="password"
-      id="password"
-      class="typicalInput" 
-      formControlName="password"
-    />
+    <div class="passwordHolder">
+      <input
+        [type]="password_type"
+        name="password"
+        id="password"
+        class="typicalInput"
+        formControlName="password"
+      />
+      <button
+        class="showPass"
+        type="button"
+        (click)="onChangePassType($event)"
+      ></button>
+    </div>
 
     <label
       [appFormChecking]="changePassForm"
@@ -25,21 +32,29 @@
       for="password"
       >Potvrď heslo</label
     >
-    <div *ngIf="onGetError(changePassForm,'checkPassword')">
+    <div *ngIf="onGetError(changePassForm, 'checkPassword')">
       <p class="invalid">*Toto pole je povinné</p>
       <p class="invalid">*Heslá sa nezhodujú</p>
     </div>
 
-    <input
-      type="password"
-      name="checkPassword"
-      id="checkPassword"
-      class="typicalInput" 
-      formControlName="checkPassword"
-    />
+    <div class="passwordHolder">
+      <input
+        [type]="password_confirm_type"
+        name="checkPassword"
+        id="checkPassword"
+        class="typicalInput"
+        formControlName="checkPassword"
+      />
+      <button
+        class="showPass"
+        type="button"
+        (click)="onChangePassType($event, true)"
+      ></button>
+    </div>
+
     <button
       type="submit"
-      class="typicalInput" 
+      class="typicalInput"
       style="cursor: pointer;"
       [disabled]="changePassForm.invalid"
     >

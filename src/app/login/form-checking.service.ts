@@ -10,4 +10,8 @@ export class FormCheckingService {
   getError(form: FormGroup, property: string) {
     return form.get(property).errors && form.get(property).touched;
   }
+
+  changePassField(event: Event){
+    (<Element>event.target).className = (<Element>event.target).className === 'showPass' ? 'hidePass' : 'showPass';
+  }
 }

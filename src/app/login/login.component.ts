@@ -29,6 +29,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   authUserSubs: Subscription;
 
+  password_type: string = 'password';
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -101,5 +103,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         updateOn: 'change',
       }),
     });
+  }
+
+  onChangePassType(event){
+    this.formCheck.changePassField(event);
+    this.password_type = this.password_type === 'password' ? 'text' : 'password';
   }
 }

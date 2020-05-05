@@ -23,6 +23,9 @@ export class ChanedPassComponent implements OnInit {
 
   firstPass: string;
 
+  password_type: string = 'password';
+  password_confirm_type: string = 'password';
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -68,5 +71,15 @@ export class ChanedPassComponent implements OnInit {
     let p2: string = this.changePassForm.get('checkPassword').value;
 
     this.authService.changePass(p1, p2)
+  }
+
+  onChangePassType(event, pass_confirm: boolean = false){
+    this.formCheck.changePassField(event);
+    if(pass_confirm){
+      this.password_confirm_type = this.password_confirm_type === 'password' ? 'text' : 'password';
+    }else{
+      this.password_type = this.password_type === 'password' ? 'text' : 'password';
+    }
+
   }
 }

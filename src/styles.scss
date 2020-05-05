@@ -44,7 +44,7 @@ button:disabled {
 
 //typical inputs - login, forms, etc
 
-input{
+input, button{
   outline: none;
 }
 
@@ -56,13 +56,30 @@ input{
   box-shadow: 2px 6px 0 $default-darker-shadow;
   padding-left: 20px;
   font-size: 1.5625vw;
-  outline: none;
+  width: 100%;
+}
+
+.passwordHolder{
+  position: relative;
+  .showPass,.hidePass{
+    width: 24px;
+    height: 24px;
+    border: none;
+    position: absolute;
+    right: 0;
+    top: 35%;
+  }
+  .showPass{
+    background: url('assets/icons/visibility-24px_colored.svg') no-repeat center;
+  }
+  .hidePass{
+    background: url('assets/icons/visibility_off-24px_colored.svg') no-repeat center;
+  }
 }
 
 button.clear{
   background: none;
   font-size: 20px;
-  background: none;
   border: none;
   color: $text-default;
   opacity: .7;
