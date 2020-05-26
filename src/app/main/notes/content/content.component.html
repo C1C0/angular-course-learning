@@ -1,0 +1,29 @@
+<div class="content-container" (click)="onCreateHolder($event)">
+  <div
+    class="textHolder"
+    *ngFor="let field of textFields"
+    appFocus
+    cdkDragBoundary=".content-container"
+    cdkDrag
+    [cdkDragFreeDragPosition]="{ x: field.x, y: field.y }"
+    
+  >
+    <img
+      src="../../../../assets/icons/open_with.svg"
+      alt="openwith"
+      cdkDragHandle
+    />
+    <textarea [id]="field.id" cols="30" rows="3" (focus)="setState(true)" (blur)="setState(false);checkContent($event)">{{ field.content }}</textarea>
+  </div>
+
+  <div
+    id="contextMenu"
+    *ngIf="contextMenu.show"
+    [ngStyle]="{ left: contextMenu.x + 'px', top: contextMenu.y + 'px' }"
+  >
+    <button class="option">
+      <img src="../../../../assets/icons/create-24px.svg" alt="" />
+    </button>
+    <button class="option idk"></button>
+  </div>
+</div>

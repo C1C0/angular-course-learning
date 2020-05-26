@@ -1,0 +1,33 @@
+<div class="section-container">
+    <ul class="sections" *ngIf="sectionsUp">
+        <img src="../../../../assets/icons/play-icon.svg" class="move" alt="move front" (click)="onMove('pages')">
+        <li *ngFor="let section of sections"
+        [id]="section.id"
+        [ngClass]="{selected: section.id == selectedSection.id}"
+        (click)="onSelect($event)">{{section.title}}</li>
+    </ul>
+
+    <div class="pagesWrapper" *ngIf="!sectionsUp">
+        <img src="../../../../assets/icons/play-icon.svg" 
+        class="move" alt="move back" (click)="onMove('sections')">
+
+        
+
+        <ul class="pages">
+            <li class="top">Literarna moderna</li>
+            <li class="lower first">Prekliati basnici</li> 
+            <li class="lower second">{{("Charles Baudelaire - kvety zla" | slice:0:25)+"..."}}</li> 
+            <li class="lower third">Prekliati basnici</li> 
+            <li class="lower first">
+             {{("Predvojnove basnicke Avantgardy" | slice:0:25)+"..."}}</li>
+         </ul>
+ 
+         <ul class="pages">
+             <li class="top">Naucny Styl</li>
+             <li class="lower first">Pouzivane slohove postupy</li> 
+             <li class="lower second">Odborna praca: vyklad</li> 
+          </ul>
+    </div>
+
+
+</div>

@@ -1,0 +1,64 @@
+@import "../../../../assets/shared/variables.scss";
+
+.content-container {
+  position: relative;
+  height: 100%;
+  width: 74vw;
+
+  .textHolder {
+    position: absolute;
+    width: max-content;
+
+    img {
+      display: block;
+      visibility: hidden;
+    }
+
+    textarea {
+      border: none;
+      border-radius: 10px;
+      outline: none;
+      padding: 4px;
+
+      &:hover {
+        border: $base-color 1px solid;
+      }
+
+      &:focus {
+        border: $base-color 1px solid;
+        border-width: 3px;
+      }
+    }
+  }
+}
+
+#contextMenu {
+  position: absolute;
+  background: #9de2f9;
+
+  box-shadow: 2px 6px 0 $default-darker-shadow;
+
+  &,
+  button.option {
+    padding: 0.1rem;
+    border-radius: 5px;
+  }
+
+  button.option {
+    position: relative;
+    background: #f9fafb;
+    height: 20px;
+    width: 20px;
+    margin: 0.3rem;
+
+    img {
+      position: absolute;
+      height: 15px;
+      width: 15px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.7;
+    }
+  }
+}

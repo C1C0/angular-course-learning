@@ -1,0 +1,10 @@
+.wrapper{
+    height: 97vh;
+    display: flex;
+    flex-direction: row;
+}
+
+app-sections-bar,
+app-options-bar{
+    z-index: 100;
+}
