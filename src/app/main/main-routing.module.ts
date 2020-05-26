@@ -17,9 +17,13 @@ const routes: Routes = [
       { path: 'faq', component: FaqComponent },
       { path: 'profile', component: ProfileComponent },
       { path: 'calendar', component: CalendarComponent },
+      {
+        path: 'notes',
+        loadChildren: () =>
+          import('./notes/notes.module').then((m) => m.NotesModule),
+      },
     ],
   },
-
 ];
 
 @NgModule({

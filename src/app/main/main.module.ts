@@ -10,6 +10,7 @@ import { DrawerComponent } from '../drawer/drawer.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { AddComponent } from './calendar/add/add.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NotesModule } from './notes/notes.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     CalendarComponent,
     AddComponent
   ],
-  imports: [CommonModule, MainRoutingModule, ReactiveFormsModule],
+  imports: [CommonModule, MainRoutingModule, ReactiveFormsModule, NotesModule],
   exports: []
 })
 export class MainModule {}

@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class MainComponent implements OnInit {
 
   faqLoaded: boolean;
+  notesLoaded: boolean = false;
 
   constructor() { }
 
@@ -16,6 +17,7 @@ export class MainComponent implements OnInit {
   }
 
   onActivate(event){
+    this.notesLoaded = event.notesLoaded;
     this.faqLoaded = event.faqLoaded;
   }
 

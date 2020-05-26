@@ -1,4 +1,4 @@
-<app-navbar></app-navbar>
+<app-navbar *ngIf="!notesLoaded"></app-navbar>
 <app-drawer></app-drawer>
 <router-outlet (activate)="onActivate($event)"></router-outlet>
 
