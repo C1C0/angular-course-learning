@@ -25,7 +25,7 @@
         <p class="invalid">*E-mail nemá správny formát</p>
       </div>
 
-      <input name="email" id="email" class="typicalInput" formControlName="email" />
+      <input name="email" id="email" class="typicalInput" formControlName="email" tabindex="1"/>
       <label
       [appFormChecking]="loginForm"
       [formCheckingInputParam]="'password'"
@@ -46,7 +46,7 @@
         id="password"
         class="typicalInput" 
         formControlName="password"
-      />
+        tabindex="2"      />
       <button class="showPass" type="button" (click)="onChangePassType($event)"></button>
       </div>
 
@@ -55,6 +55,7 @@
         style="cursor: pointer;"
         class="typicalInput" 
         [disabled]="loginForm.invalid"
+        tabindex="3"
       >
         Submit
       </button>

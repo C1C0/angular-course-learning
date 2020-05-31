@@ -1,33 +1,65 @@
 <div class="section-container">
-    <ul class="sections" *ngIf="sectionsUp">
-        <img src="../../../../assets/icons/play-icon.svg" class="move" alt="move front" (click)="onMove('pages')">
-        <li *ngFor="let section of sections"
-        [id]="section.id"
-        [ngClass]="{selected: section.id == selectedSection.id}"
-        (click)="onSelect($event)">{{section.title}}</li>
+  <ul class="sections" *ngIf="notesS.sectionsUp">
+    <img
+      src="../../../../assets/icons/play-icon.svg"
+      class="move"
+      alt="move front"
+      (click)="onMove('pages')"
+    />
+    <li
+      *ngFor="let section of notesS.sections"
+      [id]="section.id"
+      [ngClass]="{ selected: section.id == notesS.selectedSection.id }"
+      (click)="onSelectSection(section.id)"
+    >
+      {{ section.title }}
+    </li>
+  </ul>
+
+  <div class="pagesWrapper" *ngIf="!notesS.sectionsUp">
+    <img
+      src="../../../../assets/icons/play-icon.svg"
+      class="move"
+      alt="move back"
+      (click)="onMove('sections')"
+    />
+
+    <ul *ngFor="let nullLevel of notesS.orderedPages" class="pages">
+      <li
+        class="top"
+        (click)="onSelectPage(nullLevel.id)"
+        [ngClass]="{ selected: setPageClass(nullLevel.id) }"
+      >
+        {{ nullLevel.title }}
+      </li>
+
+      <div *ngFor="let firstLevel of nullLevel.children">
+        <li
+          class="lower first"
+          (click)="onSelectPage(firstLevel.id)"
+          [ngClass]="{ selected: setPageClass(firstLevel.id) }"
+        >
+          {{ firstLevel.title }}
+        </li>
+        <div *ngFor="let secondLevel of firstLevel.children">
+          <li
+            class="lower second"
+            (click)="onSelectPage(secondLevel.id)"
+            [ngClass]="{ selected: setPageClass(secondLevel.id) }"
+          >
+            {{ secondLevel.title }}
+          </li>
+          <div *ngFor="let thirdLevel of secondLevel.children">
+            <li
+              class="lower third"
+              (click)="onSelectPage(thirdLevel.id)"
+              [ngClass]="{ selected: setPageClass(thirdLevel.id) }"
+            >
+              {{ thirdLevel.title }}
+            </li>
+          </div>
+        </div>
+      </div>
     </ul>
-
-    <div class="pagesWrapper" *ngIf="!sectionsUp">
-        <img src="../../../../assets/icons/play-icon.svg" 
-        class="move" alt="move back" (click)="onMove('sections')">
-
-        
-
-        <ul class="pages">
-            <li class="top">Literarna moderna</li>
-            <li class="lower first">Prekliati basnici</li> 
-            <li class="lower second">{{("Charles Baudelaire - kvety zla" | slice:0:25)+"..."}}</li> 
-            <li class="lower third">Prekliati basnici</li> 
-            <li class="lower first">
-             {{("Predvojnove basnicke Avantgardy" | slice:0:25)+"..."}}</li>
-         </ul>
- 
-         <ul class="pages">
-             <li class="top">Naucny Styl</li>
-             <li class="lower first">Pouzivane slohove postupy</li> 
-             <li class="lower second">Odborna praca: vyklad</li> 
-          </ul>
-    </div>
-
-
+  </div>
 </div>

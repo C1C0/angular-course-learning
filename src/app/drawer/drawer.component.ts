@@ -20,24 +20,28 @@ export class DrawerComponent implements OnInit {
       src: '../../assets/icons/landing_icon.png',
       alt: 'Klikni pre presun na domov',
       label: 'Domov',
+      class: 'domov'
     },
     {
       navigation: '/user/chatroom',
       src: '../../assets/icons/chat_icon.png',
       alt: 'Klikni pre presun na chatroom',
       label: 'Chatroom',
+      class: 'chatroom'
     },
     {
       navigation: '/user/notes',
-      src: '../../assets/icons/notes_icon.png',
+      src: '../../assets/icons/notes.png',
       alt: 'Klikni pre presun na poznánky',
       label: 'Poznámky',
+      class: 'notes'
     },
     {
       navigation: '/user/calendar',
       src: '../../assets/icons/calendar_icon.png',
       alt: 'Klikni pre presun na kalenár',
       label: 'Kalendár',
+      class: 'calendar'
     },
   ];
 
@@ -58,7 +62,7 @@ export class DrawerComponent implements OnInit {
       this.renderer.setStyle(
         this.drawer.nativeElement,
         'transform',
-        'translateY(190px)'
+        'translateY(145px)'
       );
       this.renderer.setStyle(
         this.drawerTriggerArrow.nativeElement,

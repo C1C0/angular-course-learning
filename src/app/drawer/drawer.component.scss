@@ -9,7 +9,11 @@ nav#drawer{
 
     box-shadow: 0 6px 0 #F9FAFB80;
 
-    margin-top: -190px;
+    margin-top: -145px;
+
+    ul{
+        margin-top: 1.5rem;
+    }
 
     ul, .apps{
         -webkit-padding-start: 0;
@@ -19,12 +23,12 @@ nav#drawer{
         justify-content: space-between;
 
         li, li img{
-            width: 150px;
+            width: 100px;
             height: auto;
         }
 
         li{
-            margin: 1rem 2rem 0;
+            margin: 0 2rem;
             
             &:last-child{
                 transform: translate(0, -5px);
@@ -59,6 +63,6 @@ nav#drawer{
     left: 0;
     width: 100vw;
     height: 100vh;
-    opacity: .45;
+    opacity: .70;
     z-index: 699;
 }

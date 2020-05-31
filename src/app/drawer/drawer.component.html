@@ -27,4 +27,4 @@
   />
 </nav>
 
-<div *ngIf="loaded" class="overlay"></div>
+<div #overlay *ngIf="loaded" class="overlay" (click)="moveDrawer()"></div>

@@ -1,6 +1,13 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { NotesService } from '../notes.service';
 
+export interface Field{
+  id: number,
+  content: string,
+  x: number,
+  y: number,
+}
+
 @Component({
   selector: 'app-content',
   templateUrl: './content.component.html',
@@ -13,9 +20,6 @@ export class ContentComponent implements OnInit {
 
   //only second+ click creates new element
   pageClicks: number = 0;
-
-  //temporary storage for content on page
-  textFields = [];
 
   //right click menu
   contextMenu = {
@@ -35,7 +39,7 @@ export class ContentComponent implements OnInit {
     };
   }
 
-  constructor(private elRef: ElementRef, private notesService: NotesService) {}
+  constructor(private elRef: ElementRef, public notesS: NotesService) {}
 
   ngOnInit(): void {}
 
@@ -60,18 +64,18 @@ export class ContentComponent implements OnInit {
           !this.activeComponent
         ) {
           //find highest id
-          let ids = this.textFields.map(field => {
+          let ids = this.notesS.textFields.map(field => {
             return field.id;
           });
 
-          let field = {
+          let field:Field = {
             id: ids.length === 0 ? 1 : Math.max(...ids)+1,
             content: '',
-            x: event.offsetX,
-            y: event.offsetY,
+            x: event.offsetX-10,
+            y: event.offsetY-40,
           };
 
-          this.textFields.push(field);
+          this.notesS.textFields.push(field);
 
           //makes sure to automatically set focus to created element
           //if nothing writte, element will be destroyed in other functions
@@ -96,11 +100,13 @@ export class ContentComponent implements OnInit {
   //fired on blur of element
   checkContent(event) {
     //find element
-    let actualField = this.textFields.find((field) => {
-      if (field.id == event.target.id) {
+    let actualField = this.notesS.textFields.find((field) => {
+      if (field.id === event.target.id) {
         return field;
       }
     });
+
+    if(!!!actualField) return;
 
     //set its content
     actualField.content = event.target.value;
@@ -108,18 +114,15 @@ export class ContentComponent implements OnInit {
     //maps all ids and its fields and then gets index of
     //field that has give ID
     if (actualField.content === '') {
-      console.log(
-        this.textFields.map((field) => {
-          return field.id;
-        })
-      );
-      let index = this.textFields
+      let index = this.notesS.textFields
         .map((field) => {
           return field.id;
         })
         .indexOf(actualField.id);
 
-      this.textFields.splice(index, 1);
+      this.notesS.textFields.splice(index, 1);
     }
   }
+
+  
 }

@@ -1,19 +1,32 @@
 <div class="content-container" (click)="onCreateHolder($event)">
+  <div class="titleHolder" *ngIf="notesS.selectedPage">
+    <input
+      type="text"
+      [value]="notesS.selectedPage ? notesS.selectedPage.title : ''"
+      (blur)="notesS.selectedPage.title = $event.target.value"
+    />
+  </div>
   <div
     class="textHolder"
-    *ngFor="let field of textFields"
+    *ngFor="let field of notesS.textFields"
     appFocus
     cdkDragBoundary=".content-container"
     cdkDrag
     [cdkDragFreeDragPosition]="{ x: field.x, y: field.y }"
-    
   >
     <img
       src="../../../../assets/icons/open_with.svg"
       alt="openwith"
       cdkDragHandle
     />
-    <textarea [id]="field.id" cols="30" rows="3" (focus)="setState(true)" (blur)="setState(false);checkContent($event)">{{ field.content }}</textarea>
+    <textarea
+      [id]="field.id"
+      cols="30"
+      rows="3"
+      (focus)="setState(true)"
+      (blur)="setState(false); checkContent($event)"
+      >{{ field.content }}</textarea
+    >
   </div>
 
   <div

@@ -5,6 +5,29 @@
   height: 100%;
   width: 74vw;
 
+  .titleHolder{
+    border-bottom: 2px solid $text-default;
+    border-radius: 10px;
+
+    margin: 1rem auto 0;
+    width: 95%;
+
+    input{
+      width: 100%;
+
+      font-size: 35px;
+      font-weight: bold;
+
+      text-align: center;
+
+      color: $text-default;
+
+      &::selection{
+        background: $accent-color;
+      }
+    }
+  }
+
   .textHolder {
     position: absolute;
     width: max-content;
@@ -20,6 +43,8 @@
       outline: none;
       padding: 4px;
 
+      color: $text-default;
+
       &:hover {
         border: $base-color 1px solid;
       }
@@ -27,6 +52,10 @@
       &:focus {
         border: $base-color 1px solid;
         border-width: 3px;
+      }
+
+      &::selection{
+        background: $base-shade-bright;
       }
     }
   }
