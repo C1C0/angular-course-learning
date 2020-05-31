@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NotesService } from '../notes.service';
 
 @Component({
   selector: 'app-options-bar',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OptionsBarComponent implements OnInit {
 
-  constructor() { }
+  constructor(public noteS: NotesService) { }
 
   ngOnInit(): void {
+
   }
 
 }

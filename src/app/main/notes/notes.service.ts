@@ -4,8 +4,8 @@ import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { Student } from 'src/app/shared/student.model';
 
-import { Page } from "./sections-bar/sections-bar.component";
-import { Field } from "./content/content.component";
+import { Page } from './sections-bar/sections-bar.component';
+import { Field } from './content/content.component';
 
 @Injectable({
   providedIn: 'root',
@@ -23,13 +23,21 @@ export class NotesService {
   //pages variables
   pages: Page[] = [];
   orderedPages: Page[] = [];
-  selectedPage: Page
+  selectedPage: Page;
 
   //contents variables
   //temporary storage for content on page
   textFields: Field[] = [];
 
-  //get all sections
+  //last save
+  lastSave: String;
+
+  getNote(student: Student): Observable<any> {
+    return this.http.get(
+      `${environment.fetchUrl}student_classes/${student.student_class_id}/notes/${this.sections[0].note_id}`
+    );
+  }
+
   getSections(student: Student): Observable<any> {
     return this.http.get(
       `${environment.fetchUrl}student_classes/${student.student_class_id}/notes/sections/`

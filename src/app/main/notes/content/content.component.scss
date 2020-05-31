@@ -5,6 +5,8 @@
   height: 100%;
   width: 74vw;
 
+  overflow: auto;
+
   .titleHolder{
     border-bottom: 2px solid $text-default;
     border-radius: 10px;
@@ -43,15 +45,19 @@
       outline: none;
       padding: 4px;
 
+      background: transparent;
+
       color: $text-default;
 
       &:hover {
         border: $base-color 1px solid;
+        background: $base-shade-bright15;
       }
 
       &:focus {
         border: $base-color 1px solid;
         border-width: 3px;
+        background: $base-shade-bright15;
       }
 
       &::selection{

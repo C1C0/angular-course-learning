@@ -1,11 +1,11 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { NotesService } from '../notes.service';
 
-export interface Field{
-  id: number,
-  content: string,
-  x: number,
-  y: number,
+export interface Field {
+  id: number;
+  content: string;
+  x: number;
+  y: number;
 }
 
 @Component({
@@ -29,7 +29,7 @@ export class ContentComponent implements OnInit {
   };
 
   //show context menu (options)
-  @HostListener('contextmenu', ['$event']) onRightClick(event) {
+  @HostListener('contextmenu', ['$event']) onRightClick(event: MouseEvent) {
     event.preventDefault();
 
     this.contextMenu = {
@@ -37,6 +37,11 @@ export class ContentComponent implements OnInit {
       x: event.offsetX - 15,
       y: event.offsetY - 25,
     };
+  }
+
+  //prevents whole page selections
+  @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent){
+    if(event.detail > 1) event.preventDefault();
   }
 
   constructor(private elRef: ElementRef, public notesS: NotesService) {}
@@ -53,7 +58,11 @@ export class ContentComponent implements OnInit {
 
   //creates new element
   onCreateHolder(event) {
-    if (!this.activeComponent && this.pageClicks > 0) {
+    if (
+      !this.activeComponent &&
+      this.pageClicks > 0 &&
+      this.notesS.selectedPage
+    ) {
       if (!this.contextMenu.show) {
         //element can be created only on content-container,
         //when leftclicked (event.button == 0)
@@ -64,15 +73,17 @@ export class ContentComponent implements OnInit {
           !this.activeComponent
         ) {
           //find highest id
-          let ids = this.notesS.textFields.map(field => {
+          let ids = this.notesS.textFields.map((field) => {
             return field.id;
           });
 
-          let field:Field = {
-            id: ids.length === 0 ? 1 : Math.max(...ids)+1,
+          console.log(event);
+
+          let field: Field = {
+            id: ids.length === 0 ? 1 : Math.max(...ids) + 1,
             content: '',
-            x: event.offsetX-10,
-            y: event.offsetY-40,
+            x: event.offsetX - 10,
+            y: event.offsetY - 107,
           };
 
           this.notesS.textFields.push(field);
@@ -101,19 +112,26 @@ export class ContentComponent implements OnInit {
   checkContent(event) {
     //find element
     let actualField = this.notesS.textFields.find((field) => {
-      if (field.id === event.target.id) {
+      if (field.id === parseInt(event.target.id)) {
         return field;
       }
     });
 
-    if(!!!actualField) return;
+    //solving problem, when selectedPage is empty
+    //this function was throwing error
+    if (!actualField) return;
 
     //set its content
     actualField.content = event.target.value;
-
+    console.log(actualField.content);
     //maps all ids and its fields and then gets index of
     //field that has give ID
     if (actualField.content === '') {
+      console.log(
+        this.notesS.textFields.map((field) => {
+          return field.id;
+        })
+      );
       let index = this.notesS.textFields
         .map((field) => {
           return field.id;
@@ -123,6 +141,4 @@ export class ContentComponent implements OnInit {
       this.notesS.textFields.splice(index, 1);
     }
   }
-
-  
 }

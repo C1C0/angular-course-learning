@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NotesService } from '../notes.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Student } from 'src/app/shared/student.model';
+import { map, tap } from 'rxjs/operators';
 
 export interface Page {
   id: number;
@@ -29,10 +30,23 @@ export class SectionsBarComponent implements OnInit {
 
       //get sections
       this.notesS.getSections(this.notesS.student).subscribe((sections) => {
-        this.notesS.sections = sections;
+        this.notesS.sections = this.orderByIndex(sections);
+        this.notesS.getNote(this.notesS.student).subscribe(note => {
+          this.notesS.lastSave = new Date(note.updated_at).toLocaleString();
+        })
         this.notesS.selectedSection = sections[0];
       });
     });
+  }
+
+  orderByIndex(arr: any[]){
+    arr.sort((a,b)=>{
+      return a["index"] - b["index"];
+    })
+    arr.forEach(el => {
+      if(el.children) return this.orderByIndex(el.children);
+    })
+    return arr;
   }
 
   //selected section will be changed
@@ -109,7 +123,7 @@ export class SectionsBarComponent implements OnInit {
     //connect parents with children
     //then reorder base on index
 
-    let filteredPages = [[], [], [], []];
+    let filteredPages: any[] = [[],[],[],[]];
     let parent;
     let childrenOfMain;
 
@@ -123,11 +137,8 @@ export class SectionsBarComponent implements OnInit {
       else console.log(page.level, `Page.level: ${page.level} not defined`);
     });
 
-    //set parents and childrens, reorder null level, each loop covers one level of sections
     //top - "0" level
-    for (let page of filteredPages[0]) {
-      this.notesS.orderedPages[page.index] = page;
-    }
+    this.notesS.orderedPages = filteredPages[0];
 
     //"1" level
     for (let page1 of filteredPages[1]) {
@@ -187,6 +198,9 @@ export class SectionsBarComponent implements OnInit {
         }
       }
     }
+
+    //orders everything
+    this.orderByIndex(this.notesS.orderedPages);
   }
 
   createOrAddObject(parent, object) {
@@ -204,6 +218,6 @@ export class SectionsBarComponent implements OnInit {
       return;
     }
 
-    parent.children[object.index] = object;
+    parent.children.push(object);
   }
 }
