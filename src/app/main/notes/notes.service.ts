@@ -55,4 +55,29 @@ export class NotesService {
       `${environment.fetchUrl}student_classes/${student.student_class_id}/notes/sections/${this.selectedSection.id}/pages/${this.selectedPage.id}`
     );
   }
+
+  //send data
+  postSection(
+    title: String,
+    max_pages: number,
+    index: number
+  ): Observable<any> {
+    return this.http.post(
+      `${environment.fetchUrl}student_classes/${this.student.student_class_id}/notes/sections`,
+      {
+        section: {
+          title: title,
+          max_pages: max_pages,
+          index: index,
+        },
+      }
+    );
+  }
+
+  //Delete data
+  delSection(id: number): Observable<any> {
+    return this.http.delete(
+      `${environment.fetchUrl}student_classes/${this.student.student_class_id}/notes/sections/${id}`
+    );
+  }
 }

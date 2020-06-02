@@ -26,6 +26,7 @@
 
     <ul *ngFor="let nullLevel of notesS.orderedPages" class="pages">
       <li
+        [id]="nullLevel.id"
         class="top"
         (click)="onSelectPage(nullLevel.id)"
         [ngClass]="{ selected: setPageClass(nullLevel.id) }"
@@ -35,6 +36,7 @@
 
       <div *ngFor="let firstLevel of nullLevel.children">
         <li
+          [id]="firstLevel.id"
           class="lower first"
           (click)="onSelectPage(firstLevel.id)"
           [ngClass]="{ selected: setPageClass(firstLevel.id) }"
@@ -43,6 +45,7 @@
         </li>
         <div *ngFor="let secondLevel of firstLevel.children">
           <li
+            [id]="secondLevel.id"
             class="lower second"
             (click)="onSelectPage(secondLevel.id)"
             [ngClass]="{ selected: setPageClass(secondLevel.id) }"
@@ -51,6 +54,7 @@
           </li>
           <div *ngFor="let thirdLevel of secondLevel.children">
             <li
+              [id]="thirdLevel.id"
               class="lower third"
               (click)="onSelectPage(thirdLevel.id)"
               [ngClass]="{ selected: setPageClass(thirdLevel.id) }"
@@ -61,5 +65,78 @@
         </div>
       </div>
     </ul>
+  </div>
+
+  <div
+    id="contextmenuTemplate"
+    *ngIf="contextMenu.up"
+    class="contextMenuShow"
+    [ngStyle]="{
+      top: contextMenu.y - 5 + 'px',
+      left: contextMenu.x + 'px'
+    }"
+    (click)="onClose()"
+  >
+    <div *ngIf="contextMenu.for">
+      <svg id="colors">
+        <circle
+          cx="17"
+          cy="12"
+          r="8"
+          stroke="black"
+          stroke-width="1"
+          fill="red"
+        />
+        <circle
+          cx="42"
+          cy="12"
+          r="8"
+          stroke="black"
+          stroke-width="1"
+          fill="blue"
+        />
+        <circle
+          cx="67"
+          cy="12"
+          r="8"
+          stroke="black"
+          stroke-width="1"
+          fill="green"
+        />
+        <circle
+          cx="92"
+          cy="12"
+          r="8"
+          stroke="black"
+          stroke-width="1"
+          fill="yellow"
+        />
+      </svg>
+      <hr />
+    </div>
+
+    <div [ngSwitch]="contextMenu.for" class="magageButtons">
+      <div *ngSwitchCase="null" class="manageItem" (click)="onCreateSection()">
+        <svg height="24" viewBox="0 0 24 24" width="24" version="1.1" id="svg6">
+          <path d="M0 0h24v24H0z" fill="none" id="path2" />
+
+          <path
+            d="m 7.3401663,12.997021 h 3.6628127 v 3.662813 h 1.994042 v -3.662813 h 3.662813 v -1.994042 l -3.662813,0 V 7.3401663 h -1.994042 v 3.6628127 l -3.6628127,0 z m -2.4112341,6.074047 c 3.9103005,3.9103 10.2318348,3.9103 14.1421358,0 3.9103,-3.910301 3.9103,-10.2318353 0,-14.1421358 -3.910301,-3.9103005 -10.2318353,-3.9103005 -14.1421358,0 -3.9103005,3.9103005 -3.9103005,10.2318348 0,14.1421358 z M 17.656854,6.3431458 c 3.118341,3.1183409 3.118341,8.1953672 0,11.3137082 -3.118341,3.118341 -8.1953673,3.118341 -11.3137082,0 -3.118341,-3.118341 -3.118341,-8.1953673 0,-11.3137082 3.1183409,-3.118341 8.1953672,-3.118341 11.3137082,0 z"
+            id="path4"
+            fill="#424242"
+          />
+        </svg>
+        <hr />
+        <p>Add new</p>
+      </div>
+
+      <div *ngSwitchCase="'sections'">
+        <div class="manageItem" (click)="onDeleteSection()">
+          <p>X</p>
+          <hr />
+          <p>Remove</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

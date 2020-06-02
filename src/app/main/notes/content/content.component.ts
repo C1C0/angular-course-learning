@@ -29,19 +29,28 @@ export class ContentComponent implements OnInit {
   };
 
   //show context menu (options)
-  @HostListener('contextmenu', ['$event']) onRightClick(event: MouseEvent) {
+  @HostListener('contextmenu', ['$event']) onRightClick(event) {
     event.preventDefault();
 
-    this.contextMenu = {
-      show: true,
-      x: event.offsetX - 15,
-      y: event.offsetY - 25,
-    };
+    if (event.target.className == 'content-container'){
+      this.contextMenu = {
+        show: true,
+        x: event.offsetX - 15,
+        y: event.offsetY - 25,
+      };
+    }
   }
 
   //prevents whole page selections
-  @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent){
-    if(event.detail > 1) event.preventDefault();
+  @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent) {
+    if (event.detail > 1) event.preventDefault();
+  }
+
+  //enable tabulator inside textarea
+  @HostListener('keydown', ['$event']) onKeyDown(event: KeyboardEvent){
+    if(event.code === 'Tab'){
+      event.preventDefault()
+    }
   }
 
   constructor(private elRef: ElementRef, public notesS: NotesService) {}
