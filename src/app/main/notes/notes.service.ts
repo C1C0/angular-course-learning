@@ -74,6 +74,18 @@ export class NotesService {
     );
   }
 
+  //update data
+  putSection(id: number, title: string): Observable<any> {
+    return this.http.put(
+      `${environment.fetchUrl}student_classes/${this.student.student_class_id}/notes/sections/${id}`,
+      {
+        section: {
+          title: title,
+        },
+      }
+    );
+  }
+
   //Delete data
   delSection(id: number): Observable<any> {
     return this.http.delete(

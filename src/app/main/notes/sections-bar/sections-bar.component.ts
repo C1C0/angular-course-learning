@@ -23,6 +23,16 @@ export interface Page {
   children?;
 }
 
+export interface Section {
+  id: number;
+  index: number;
+  max_pages: number;
+  note_id: number;
+  title: string;
+  updated_at: string;
+  created_at: string;
+}
+
 @Component({
   selector: 'app-sections-bar',
   templateUrl: './sections-bar.component.html',
@@ -37,6 +47,9 @@ export class SectionsBarComponent implements OnInit {
     x: null,
     y: null,
   };
+
+  //used for renaming
+  renaming: boolean = false;
 
   constructor(
     public notesS: NotesService,
@@ -60,14 +73,13 @@ export class SectionsBarComponent implements OnInit {
         event.target.className += ' selected';
       }
 
-      document.querySelectorAll('ul.pages').forEach(ulPage =>{
+      document.querySelectorAll('ul.pages').forEach((ulPage) => {
         if (event.path.includes(ulPage)) {
           console.log(event.target);
           pageType = 'pages';
           event.target.className += ' selected';
         }
-      })
-
+      });
     }
 
     console.log(event);
@@ -127,6 +139,8 @@ export class SectionsBarComponent implements OnInit {
           this.notesS.lastSave = new Date(note.updated_at).toLocaleString();
         });
         this.notesS.selectedSection = sections[0];
+
+        console.log(this.notesS.sections);
       });
     });
   }
@@ -143,18 +157,20 @@ export class SectionsBarComponent implements OnInit {
 
   //selected section will be changed
   onSelectSection(sectionId) {
-    if (this.notesS.selectedSection.id !== sectionId) {
-      this.notesS.selectedSection = this.notesS.sections.find((section) => {
-        return section.id == sectionId;
-      });
+    if (!this.renaming && !this.contextMenu.up) {
+      if (this.notesS.selectedSection.id !== sectionId) {
+        this.notesS.selectedSection = this.notesS.sections.find((section) => {
+          return section.id == sectionId;
+        });
 
-      //gets pages of selectedSection
-      this.onGetPages();
+        //gets pages of selectedSection
+        this.onGetPages();
+      }
+
+      //hides sections part
+      //shows pages part
+      this.notesS.sectionsUp = false;
     }
-
-    //hides sections part
-    //shows pages part
-    this.notesS.sectionsUp = false;
   }
 
   //changes content in content component
@@ -298,7 +314,7 @@ export class SectionsBarComponent implements OnInit {
   onCreateSection() {
     let newIndex = this.findHighest(this.notesS.sections, 'index');
     this.notesS
-      .postSection('AHoj' + (newIndex + 1), 15, newIndex + 1)
+      .postSection('Nová sekcia', 15, newIndex + 1)
       .subscribe((newSection) => {
         this.notesS.sections.push(newSection);
       });
@@ -312,16 +328,77 @@ export class SectionsBarComponent implements OnInit {
       });
 
       //to all sections that comes after  this section (with higher index), lower index by one
-      this.notesS.sections.forEach(compSection =>{
-        if(compSection.index > delSection.index){
+      this.notesS.sections.forEach((compSection) => {
+        if (compSection.index > delSection.index) {
           compSection.index--;
         }
-      })
+      });
+
       //removes section
       let sectionArrayPos = this.notesS.sections.indexOf(delSection);
       this.notesS.sections.splice(sectionArrayPos, 1);
-
     });
+  }
+
+  onChangeSectionToInput() {
+    //to make sure user cant load pages
+    this.renaming = true;
+
+    //creates element
+    let li = document.getElementById(this.contextMenu.id);
+    li.draggable = false;
+
+    //creates input and creates new listener to it
+    let input = this.renderer.createElement('input');
+    input.addEventListener('blur', this.renameSection.bind(this), true);
+    input.addEventListener('keyup', (event) => {
+      if (event.code === 'Enter') {
+        input.blur();
+      }
+    });
+    //stores values
+    //first is new set value
+    //second used for comparision
+    this.renderer.setAttribute(input, 'value', li.innerText);
+    this.renderer.setAttribute(input, 'data-initvalue', li.innerText);
+    input.draggable = false;
+
+    //clear li's inner value and show only input
+    li.innerText = '';
+    this.renderer.appendChild(li, input);
+    input.select();
+  }
+
+  renameSection(event) {
+    let calledInputEl = <HTMLInputElement>event.target;
+
+    let newValue: string = calledInputEl.value;
+    if (newValue === '') newValue = 'Nová sekcia';
+
+    let oldValue = calledInputEl.attributes.getNamedItem('data-initvalue')
+      .value;
+
+    //If value doesnt change, it is waste of performance to send any http request
+    if (oldValue != newValue) {
+      this.notesS
+        .putSection(this.contextMenu.id, newValue)
+        .subscribe((mess) => {
+          //find section
+          let renSection = this.notesS.sections.find((section) => {
+            return this.contextMenu.id === section.id;
+          });
+
+          //writes locally
+          renSection.title = newValue;
+          console.log(renSection);
+        });
+    }
+
+    //sets newly created value
+    calledInputEl.parentElement.draggable = true;
+    calledInputEl.parentElement.innerHTML = newValue;
+
+    this.renaming = false;
   }
 
   findById(arr, id): any {
@@ -364,5 +441,118 @@ export class SectionsBarComponent implements OnInit {
     });
 
     return oldPropr;
+  }
+
+  //drag-n-drop styling
+  dragParent: HTMLElement;
+
+  onDrag(event: DragEvent) {
+    let element = <HTMLElement>event.target;
+    event.dataTransfer.setData('sectionId', element.id);
+  }
+
+  onDragHint(event: DragEvent) {
+    this.dragParent = <HTMLElement>event.target;
+    let hr = document.getElementById(`${this.dragParent.children[0].id}`);
+    hr.classList.add('hoverDrop');
+    event.preventDefault();
+  }
+
+  onDragRemoveHint(event: DragEvent) {
+    let hr = document.getElementById(`${this.dragParent.children[0].id}`);
+    hr.classList.remove('hoverDrop');
+  }
+
+  //drag-n-drop changing order
+  onDragDrop(event: DragEvent) {
+    //purpose of this fucntion is to put dragged el between two elements
+
+    event.preventDefault();
+    let droppingHr = <HTMLElement>event.target;
+    let droppingHrId = droppingHr.firstElementChild.id.split('-');
+    let droppingId = parseInt(droppingHrId[1]);
+    let droppingLast: boolean = droppingHrId[2] !== undefined ? true : false;
+    let draggingId = parseInt(event.dataTransfer.getData('sectionId'));
+
+    let changePlaceSection: Section = this.notesS.sections.find((section) => {
+      return draggingId === section.id;
+    });
+
+    let oldPlaceSection: Section = this.notesS.sections.find((section) => {
+      return droppingId === section.id;
+    });
+
+    if (oldPlaceSection !== changePlaceSection) {
+      //old index of dragged element
+      //used to determine, wheter user is moving element down or up
+      let initIndex = changePlaceSection.index;
+
+      //delete dragged
+      this.notesS.sections.splice(changePlaceSection.index, 1);
+
+      //set selected index
+      changePlaceSection.index = oldPlaceSection.index;
+
+      //Two ways of dragging - up and down
+      //a bit different logic
+
+      if (initIndex > oldPlaceSection.index) {
+        //dragging element above it's position
+        this.notesS.sections.splice(
+          oldPlaceSection.index,
+          0,
+          changePlaceSection
+        );
+
+        //increase index of every el which is in selected boundries
+        this.notesS.sections.forEach((compSection) => {
+          if (
+            compSection.index >= changePlaceSection.index &&
+            compSection != changePlaceSection &&
+            compSection.index < initIndex
+          ) {
+            compSection.index++;
+          }
+        });
+      } else {
+        //dragging element under it's position
+
+        //if dragged to last position
+        if (droppingLast) {
+          this.notesS.sections.push(changePlaceSection);
+        } else {
+          //this has to be done becuase all sections are being found by ID, which in this case has to be -1
+          changePlaceSection.index--;
+
+          //index is as well -1
+          this.notesS.sections.splice(
+            oldPlaceSection.index - 1,
+            0,
+            changePlaceSection
+          );
+        }
+
+        //decrease index of every el which is in selected boundries
+        this.notesS.sections.forEach((compSection) => {
+          if (
+            compSection.index <= changePlaceSection.index &&
+            compSection != changePlaceSection &&
+            compSection.index >= initIndex
+          ) {
+            compSection.index--;
+          }
+        });
+      }
+    }
+
+    //hides <hr> hint
+    this.onDragRemoveHint(event);
+    
+  }
+
+  onDragOver(event: DragEvent) {
+    //(drop) doesnt work if this not set
+    // event.stopPropagation();
+    event.preventDefault();
   }
 }
