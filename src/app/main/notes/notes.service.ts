@@ -32,6 +32,7 @@ export class NotesService {
   //last save
   lastSave: String;
 
+  //getting data
   getNote(student: Student): Observable<any> {
     return this.http.get(
       `${environment.fetchUrl}student_classes/${student.student_class_id}/notes/${this.sections[0].note_id}`
@@ -74,6 +75,19 @@ export class NotesService {
     );
   }
 
+  postPage(title: string, level: number, index: number): Observable<any> {
+    return this.http.post(
+      `${environment.fetchUrl}student_classes/${this.student.student_class_id}/notes/sections/${this.selectedSection.id}/pages`,
+      {
+        page: {
+          title: title,
+          level: level,
+          index: index,
+        },
+      }
+    );
+  }
+
   //update data
   putSection(id: number, title: string): Observable<any> {
     return this.http.put(
@@ -82,6 +96,37 @@ export class NotesService {
         section: {
           title: title,
         },
+      }
+    );
+  }
+
+  putPage(
+    id: number,
+    {
+      index: index = null,
+      level: level = null,
+      title: title = '',
+      content: content = '',
+    }
+  ): Observable<any> {
+    return this.http.put(
+      `${environment.fetchUrl}student_classes/${this.student.student_class_id}/notes/sections/${this.selectedSection.id}/pages/${id}`,
+      {
+        page: {
+          title: title,
+          content: content,
+          level: level,
+          index: index,
+        },
+      }
+    );
+  }
+
+  putSectionsIndexes(indexes): Observable<any> {
+    return this.http.put(
+      `${environment.fetchUrl}student_classes/${this.student.student_class_id}/notes/sections/indexes`,
+      {
+        indexes: indexes,
       }
     );
   }

@@ -150,4 +150,13 @@ export class ContentComponent implements OnInit {
       this.notesS.textFields.splice(index, 1);
     }
   }
+
+  onUpdateTitle(event: FocusEvent){
+    let inputEl = <HTMLInputElement>event.target;
+    if(this.notesS.selectedPage.title === inputEl.value) return
+    this.notesS.selectedPage.title = inputEl.value;
+    this.notesS.putPage(this.notesS.selectedPage.id, {title: inputEl.value}).subscribe(mess => {
+      console.log('changing name')
+    })
+  }
 }

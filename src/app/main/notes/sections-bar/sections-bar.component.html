@@ -28,15 +28,15 @@
       </li>
 
       <div
-      *ngIf="i === notesS.sections.length-1"
-      class="hrWrapper"
-      (dragenter)="onDragHint($event)"
-      (dragleave)="onDragRemoveHint($event)"
-      (dragover)="onDragOver($event)"
-      (drop)="onDragDrop($event)"
-    >
-      <hr [id]="'hr-' + section.id+'-l'" />
-    </div>
+        *ngIf="i === notesS.sections.length - 1"
+        class="hrWrapper"
+        (dragenter)="onDragHint($event)"
+        (dragleave)="onDragRemoveHint($event)"
+        (dragover)="onDragOver($event)"
+        (drop)="onDragDrop($event)"
+      >
+        <hr [id]="'hr-' + section.id + '-l'" />
+      </div>
     </div>
   </ul>
 
@@ -48,40 +48,93 @@
       (click)="onMove('sections')"
     />
 
+    <!-- NULL -->
     <ul *ngFor="let nullLevel of notesS.orderedPages" class="pages">
+      <div
+        class="hrWrapper"
+        (dragenter)="onDragHint($event)"
+        (dragleave)="onDragRemoveHint($event)"
+        (dragover)="onDragOver($event)"
+        (drop)="onDragDrop($event)"
+      >
+        <hr [id]="'hr-' + nullLevel.id" />
+      </div>
       <li
         [id]="nullLevel.id"
         class="top"
         (click)="onSelectPage(nullLevel.id)"
         [ngClass]="{ selected: setPageClass(nullLevel.id) }"
+        draggable="true"
+        (dragstart)="onDrag($event)"
       >
         {{ nullLevel.title }}
       </li>
 
-      <div *ngFor="let firstLevel of nullLevel.children">
+      <!-- FIRST -->
+      <div *ngFor="let firstLevel of nullLevel.children" class="lowerWrapper first">
+        <div
+          class="hrWrapper"
+          (dragenter)="onDragHint($event)"
+          (dragleave)="onDragRemoveHint($event)"
+          (dragover)="onDragOver($event)"
+          (drop)="onDragDrop($event)"
+        >
+          <hr [id]="'hr-' + firstLevel.id" />
+        </div>
+
         <li
           [id]="firstLevel.id"
-          class="lower first"
+          class="lower"
           (click)="onSelectPage(firstLevel.id)"
           [ngClass]="{ selected: setPageClass(firstLevel.id) }"
+          draggable="true"
+          (dragstart)="onDrag($event)"
         >
           {{ firstLevel.title }}
         </li>
-        <div *ngFor="let secondLevel of firstLevel.children">
+
+        <!-- SECOND -->
+        <div *ngFor="let secondLevel of firstLevel.children" class="lowerWrapper second">
+          <div
+            class="hrWrapper"
+            (dragenter)="onDragHint($event)"
+            (dragleave)="onDragRemoveHint($event)"
+            (dragover)="onDragOver($event)"
+            (drop)="onDragDrop($event)"
+          >
+            <hr [id]="'hr-' + secondLevel.id" />
+          </div>
+
           <li
             [id]="secondLevel.id"
-            class="lower second"
+            class="lower"
             (click)="onSelectPage(secondLevel.id)"
             [ngClass]="{ selected: setPageClass(secondLevel.id) }"
+            draggable="true"
+            (dragstart)="onDrag($event)"
           >
             {{ secondLevel.title }}
           </li>
-          <div *ngFor="let thirdLevel of secondLevel.children">
+
+          <!-- THIRD -->
+          <div *ngFor="let thirdLevel of secondLevel.children" class="lowerWrapper third">
+            <div
+              class="hrWrapper"
+              (dragenter)="onDragHint($event)"
+              (dragleave)="onDragRemoveHint($event)"
+              (dragover)="onDragOver($event)"
+              (drop)="onDragDrop($event)"
+            >
+              <hr [id]="'hr-' + thirdLevel.id" />
+            </div>
+
             <li
               [id]="thirdLevel.id"
-              class="lower third"
+              class="lower"
               (click)="onSelectPage(thirdLevel.id)"
               [ngClass]="{ selected: setPageClass(thirdLevel.id) }"
+              draggable="true"
+              (dragstart)="onDrag($event)"
             >
               {{ thirdLevel.title }}
             </li>
@@ -148,12 +201,12 @@
     </div>
 
     <div [ngSwitch]="contextMenu.for" class="magageButtons">
-      <div *ngSwitchCase="null" class="manageItem" (click)="onCreateSection()">
+      <div *ngSwitchCase="null" class="manageItem" (click)="notesS.sectionsUp ? onCreateSection() : onCreatePage()">
         <div class="icon">
           <svg
-            height="24"
+            height="22"
             viewBox="0 0 24 24"
-            width="24"
+            width="22"
             version="1.1"
             id="svg6"
           >
@@ -166,7 +219,7 @@
             />
           </svg>
         </div>
-        <p>Vytvoriť nové</p>
+        <p style="font-size: .9em;">Vytvoriť nové</p>
       </div>
 
       <div *ngSwitchCase="'sections'">
@@ -187,6 +240,41 @@
           <p>Odstrániť</p>
         </div>
         <div class="manageItem" (click)="onChangeSectionToInput()">
+          <div class="icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path
+                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+              />
+              <path d="M0 0h24v24H0z" fill="none" />
+            </svg>
+          </div>
+          <p>Premenovať</p>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'pages'">
+        <div class="manageItem" (click)="onDeletePage()">
+          <div class="icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+              />
+            </svg>
+          </div>
+          <p>Odstrániť</p>
+        </div>
+        <div class="manageItem" (click)="onChangePageToInput()">
           <div class="icon">
             <svg
               xmlns="http://www.w3.org/2000/svg"

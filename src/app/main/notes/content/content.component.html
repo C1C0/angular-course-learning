@@ -3,7 +3,7 @@
     <input
       type="text"
       [value]="notesS.selectedPage ? notesS.selectedPage.title : ''"
-      (blur)="notesS.selectedPage.title = $event.target.value"
+      (blur)="onUpdateTitle($event)"
     />
   </div>
   <div

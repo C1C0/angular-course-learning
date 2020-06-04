@@ -28,6 +28,26 @@
 
   ul {
     overflow: hidden;
+
+    .hrWrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      height: 10px;
+      width: 90%;
+
+      margin: 0 auto;
+
+      hr {
+        pointer-events: none;
+
+        visibility: hidden;
+        &.hoverDrop {
+          visibility: visible;
+        }
+      }
+    }
     li {
       transition: 50ms ease;
       background-color: $base-shade;
@@ -43,6 +63,10 @@
         transition: 100ms ease;
         background-color: $accent-shade2;
         box-shadow: 0px 6px 0px $default-darker-shadow;
+      }
+
+      &:active{
+        background: $accent-shade3;
       }
 
       input {
@@ -66,26 +90,6 @@
       margin-bottom: 1rem;
     }
 
-    .hrWrapper {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-
-      height: 12px;
-      width: 90%;
-
-      margin: 0 auto;
-
-      hr {
-        pointer-events: none;
-
-        visibility: hidden;
-        &.hoverDrop {
-          visibility: visible;
-        }
-      }
-    }
-
     li {
       width: 70%;
       margin: 0.2rem auto;
@@ -107,6 +111,7 @@
     ul.pages {
       margin-right: 1rem;
       margin-top: 1.5rem;
+
       li {
         float: right;
       }
@@ -121,23 +126,21 @@
         text-align: center;
       }
 
-      li.lower {
-        font-size: 15px;
-        text-align: left;
-        margin-top: 0.45rem;
-        padding: 0.2rem 0.3rem;
+      .lowerWrapper{
 
-        &.first {
+        margin: 0 0 0 auto;
+
+        &.first, &.second, &.third  {
           width: 75%;
         }
 
-        &.second {
-          width: 65%;
+        li.lower {
+          font-size: 15px;
+          text-align: left;
+          width: 90%;  
+          padding: .2rem .25rem;
         }
 
-        &.third {
-          width: 55%;
-        }
       }
     }
   }
