@@ -10,7 +10,7 @@
       <div
         class="hrWrapper"
         (dragenter)="onDragHint($event)"
-        (dragleave)="onDragRemoveHint($event)"
+        (dragleave)="onDragRemoveHint()"
         (dragover)="onDragOver($event)"
         (drop)="onDragDrop($event)"
       >
@@ -31,7 +31,7 @@
         *ngIf="i === notesS.sections.length - 1"
         class="hrWrapper"
         (dragenter)="onDragHint($event)"
-        (dragleave)="onDragRemoveHint($event)"
+        (dragleave)="onDragRemoveHint()"
         (dragover)="onDragOver($event)"
         (drop)="onDragDrop($event)"
       >
@@ -48,98 +48,61 @@
       (click)="onMove('sections')"
     />
 
-    <!-- NULL -->
-    <ul *ngFor="let nullLevel of notesS.orderedPages" class="pages">
-      <div
-        class="hrWrapper"
-        (dragenter)="onDragHint($event)"
-        (dragleave)="onDragRemoveHint($event)"
-        (dragover)="onDragOver($event)"
-        (drop)="onDragDrop($event)"
-      >
-        <hr [id]="'hr-' + nullLevel.id" />
-      </div>
-      <li
-        [id]="nullLevel.id"
-        class="top"
-        (click)="onSelectPage(nullLevel.id)"
-        [ngClass]="{ selected: setPageClass(nullLevel.id) }"
-        draggable="true"
-        (dragstart)="onDrag($event)"
-      >
-        {{ nullLevel.title }}
-      </li>
-
-      <!-- FIRST -->
-      <div *ngFor="let firstLevel of nullLevel.children" class="lowerWrapper first">
+    <ul class="pages">
+      <div *ngFor="let page of notesS.pages" [ngSwitch]="page.level">
         <div
           class="hrWrapper"
           (dragenter)="onDragHint($event)"
-          (dragleave)="onDragRemoveHint($event)"
+          (dragleave)="onDragRemoveHint()"
           (dragover)="onDragOver($event)"
           (drop)="onDragDrop($event)"
         >
-          <hr [id]="'hr-' + firstLevel.id" />
+          <hr [id]="'hr-' + page.id" />
         </div>
-
         <li
-          [id]="firstLevel.id"
-          class="lower"
-          (click)="onSelectPage(firstLevel.id)"
-          [ngClass]="{ selected: setPageClass(firstLevel.id) }"
+          *ngSwitchCase="0"
+          [id]="page.id"
+          class="top"
+          (click)="onSelectPage(page.id)"
+          [ngClass]="{ selected: setPageClass(page.id) }"
           draggable="true"
           (dragstart)="onDrag($event)"
         >
-          {{ firstLevel.title }}
+          {{ page.title }}
         </li>
-
-        <!-- SECOND -->
-        <div *ngFor="let secondLevel of firstLevel.children" class="lowerWrapper second">
-          <div
-            class="hrWrapper"
-            (dragenter)="onDragHint($event)"
-            (dragleave)="onDragRemoveHint($event)"
-            (dragover)="onDragOver($event)"
-            (drop)="onDragDrop($event)"
-          >
-            <hr [id]="'hr-' + secondLevel.id" />
-          </div>
-
-          <li
-            [id]="secondLevel.id"
-            class="lower"
-            (click)="onSelectPage(secondLevel.id)"
-            [ngClass]="{ selected: setPageClass(secondLevel.id) }"
-            draggable="true"
-            (dragstart)="onDrag($event)"
-          >
-            {{ secondLevel.title }}
-          </li>
-
-          <!-- THIRD -->
-          <div *ngFor="let thirdLevel of secondLevel.children" class="lowerWrapper third">
-            <div
-              class="hrWrapper"
-              (dragenter)="onDragHint($event)"
-              (dragleave)="onDragRemoveHint($event)"
-              (dragover)="onDragOver($event)"
-              (drop)="onDragDrop($event)"
-            >
-              <hr [id]="'hr-' + thirdLevel.id" />
-            </div>
-
-            <li
-              [id]="thirdLevel.id"
-              class="lower"
-              (click)="onSelectPage(thirdLevel.id)"
-              [ngClass]="{ selected: setPageClass(thirdLevel.id) }"
-              draggable="true"
-              (dragstart)="onDrag($event)"
-            >
-              {{ thirdLevel.title }}
-            </li>
-          </div>
-        </div>
+        <li
+          *ngSwitchCase="1"
+          [id]="page.id"
+          class="lower first"
+          (click)="onSelectPage(page.id)"
+          [ngClass]="{ selected: setPageClass(page.id) }"
+          draggable="true"
+          (dragstart)="onDrag($event)"
+        >
+          {{ page.title }}
+        </li>
+        <li
+          *ngSwitchCase="2"
+          [id]="page.id"
+          class="lower second"
+          (click)="onSelectPage(page.id)"
+          [ngClass]="{ selected: setPageClass(page.id) }"
+          draggable="true"
+          (dragstart)="onDrag($event)"
+        >
+          {{ page.title }}
+        </li>
+        <li
+          *ngSwitchCase="3"
+          [id]="page.id"
+          class="lower third"
+          (click)="onSelectPage(page.id)"
+          [ngClass]="{ selected: setPageClass(page.id) }"
+          draggable="true"
+          (dragstart)="onDrag($event)"
+        >
+          {{ page.title }}
+        </li>
       </div>
     </ul>
   </div>
@@ -201,7 +164,11 @@
     </div>
 
     <div [ngSwitch]="contextMenu.for" class="magageButtons">
-      <div *ngSwitchCase="null" class="manageItem" (click)="notesS.sectionsUp ? onCreateSection() : onCreatePage()">
+      <div
+        *ngSwitchCase="null"
+        class="manageItem"
+        (click)="notesS.sectionsUp ? onCreateSection() : onCreatePage()"
+      >
         <div class="icon">
           <svg
             height="22"
@@ -219,7 +186,7 @@
             />
           </svg>
         </div>
-        <p style="font-size: .9em;">Vytvoriť nové</p>
+        <p style="font-size: 0.9em;">Vytvoriť nové</p>
       </div>
 
       <div *ngSwitchCase="'sections'">
@@ -258,6 +225,31 @@
       </div>
 
       <div *ngSwitchCase="'pages'">
+        <div class="halfItem">
+          <div class="leftHalf manageItem" (click)="changeLevel('left')">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path d="M12 8V4l8 8-8 8v-4H4V8z" />
+            </svg>
+          </div>
+          <div class="rightHalf manageItem" (click)="changeLevel('right')">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path d="M12 8V4l8 8-8 8v-4H4V8z" />
+            </svg>
+          </div>
+        </div>
+
         <div class="manageItem" (click)="onDeletePage()">
           <div class="icon">
             <svg

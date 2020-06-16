@@ -131,10 +131,25 @@ export class NotesService {
     );
   }
 
+  putPagesIndexes(indexes): Observable<any>{
+    return this.http.put(
+      `${environment.fetchUrl}student_classes/${this.student.student_class_id}/notes/sections/${this.selectedSection.id}/pages/indexes`,
+      {
+        indexes: indexes
+      }
+    )
+  }
+
   //Delete data
   delSection(id: number): Observable<any> {
     return this.http.delete(
       `${environment.fetchUrl}student_classes/${this.student.student_class_id}/notes/sections/${id}`
     );
+  }
+
+  delPage(id: number): Observable<any>{
+    return this.http.delete(
+      `${environment.fetchUrl}student_classes/${this.student.student_class_id}/notes/sections/${this.selectedSection.id}/pages/${id}`,
+    )
   }
 }
