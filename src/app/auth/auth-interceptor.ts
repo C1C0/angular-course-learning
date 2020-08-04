@@ -28,6 +28,7 @@ export class AuthInterceptorService implements HttpInterceptor {
       return next.handle(modifiedRequest).pipe(
         catchError((err) => {
           if (err.status === 401) {
+            // if auth fails, clear local storage and return to /login
             this.lsS.clear();
             this.router.navigate(['/login']);
           }

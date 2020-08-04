@@ -12,23 +12,44 @@
 
   user-select: none;
 
-  img.move{
-    opacity: .5;
+  img.move {
+    opacity: 0.5;
     max-width: 30px;
     max-height: 30px;
     margin: 1rem 1rem 0 1rem;
 
     cursor: pointer;
 
-    &:hover{
-        transition: 50ms ease;
-        opacity: 1;
+    &:hover {
+      transition: 50ms ease;
+      opacity: 1;
     }
-}
+  }
 
   ul {
     overflow: hidden;
+
+    .hrWrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      height: 10px;
+      width: 90%;
+
+      margin: 0 auto;
+
+      hr {
+        pointer-events: none;
+
+        visibility: hidden;
+        &.hoverDrop {
+          visibility: visible;
+        }
+      }
+    }
     li {
+      transition: 50ms ease;
       background-color: $base-shade;
       color: white;
 
@@ -37,47 +58,72 @@
       cursor: pointer;
 
       &:hover,
+      &:focus,
       &.selected {
         transition: 100ms ease;
         background-color: $accent-shade2;
         box-shadow: 0px 6px 0px $default-darker-shadow;
-        transform: translateY(-5px);
+      }
+
+      &:active {
+        background: $accent-shade3;
+      }
+
+      input {
+        color: white;
+        border: none;
+        background: none;
+        width: 100%;
+        height: 100%;
+
+        &::selection {
+          background: $accent-shade2;
+        }
       }
     }
   }
 
   ul.sections {
-    img{
+    img {
       display: block;
       margin-left: auto;
-      margin-bottom:1rem;
+      margin-bottom: 1rem;
     }
+
     li {
       width: 70%;
-      margin: 1rem auto;
+      margin: 0.2rem auto;
       padding: 0.2rem 1rem;
 
-      font-weight: bold;
-      font-size: 19px;
-      text-align: center;
-
+      &,
+      input {
+        font-weight: bold;
+        font-size: 19px;
+        text-align: center;
+      }
     }
   }
 
   .pagesWrapper {
-    img{
+    img {
       transform: rotate(-180deg);
     }
     ul.pages {
       margin-right: 1rem;
       margin-top: 1.5rem;
+      $pagesWidth: 14.7916vw;
+
+      &:last-child{
+        margin-bottom: 1rem;
+      }
+
       li {
         float: right;
       }
 
       li.top {
-        width: 85%;
-        margin-top: 0.5rem;
+        width: $pagesWidth * 0.85;
+        margin-top: 1rem;
         padding: 0.2rem 0;
 
         font-weight: bold;
@@ -86,27 +132,32 @@
       }
 
       li.lower {
+        margin: 0 0 0 auto;
         font-size: 15px;
         text-align: left;
-        margin-top: 0.45rem;
-        padding: 0.2rem 0.3rem;
+        width: 90%;
+        padding: 0.2rem 0.25rem;
 
         &.first {
-          width: 75%;
+          width: $pagesWidth * 0.8;
         }
 
         &.second {
-          width: 65%;
+          width: $pagesWidth * 0.6;
         }
 
         &.third {
-          width: 55%;
+          width: $pagesWidth * 0.4;
         }
+      }
+
+      &:first-child{
+        margin-top: 0;
       }
     }
   }
 
-  .contextMenuShow{
+  .contextMenuShow {
     display: block;
     flex-direction: column;
     align-items: center;
@@ -118,51 +169,83 @@
 
     box-shadow: 5px 5px 0 $default-darker-shadow;
 
-    z-index: 10;
+    z-index: 100;
 
     height: auto;
-    width: 120px;
+    width: 150px;
 
-    padding: .3rem;
+    padding: 0.3rem;
 
-    svg#colors{
+    svg#colors {
       position: relative;
       display: flex;
-      margin: .1rem auto 0;
+      margin: 0.1rem auto 0;
       height: 25px;
       width: 90%;
 
-      circle{
+      circle {
         cursor: pointer;
 
-        &:hover{
+        &:hover {
           transition: 50ms ease;
           transform: translateY(-3px);
         }
       }
     }
 
-    hr{
+    hr {
       width: 90%;
       color: $text-default;
       margin: 0 auto;
     }
 
-    .magageButtons{
-      margin: .3rem auto;
-
+    .magageButtons {
+      margin: 0.3rem auto;
       width: 90%;
 
-      .manageItem{
-        display: flex;  
+      .halfItem,
+      .halfItem .rightHalf {
+        display: flex;
+        flex-direction: row;
+
+        .leftHalf {
+          width: 50%;
+          border-radius: 10px 0 0 10px;
+          svg {
+            transform: rotate(180deg);
+          }
+        }
+
+        .rightHalf {
+          width: 50%;
+          border-radius: 0 10px 10px 0;
+          justify-content: flex-end;
+        }
+      }
+
+      .manageItem {
+        display: flex;
         cursor: pointer;
-  
-        hr{
-          width: auto;
+
+        border-radius: 10px;
+
+        padding: 0.2rem 0.3rem;
+
+        &:hover {
+          background: $hover-background;
+        }
+
+        .icon {
+          display: flex;
+          align-content: center;
+          justify-content: center;
+          min-width: 30px;
+        }
+
+        p {
+          overflow-wrap: normal;
         }
       }
     }
-
-    
   }
 }

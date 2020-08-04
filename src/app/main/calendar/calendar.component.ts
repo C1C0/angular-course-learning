@@ -2,15 +2,11 @@ import {
   Component,
   OnInit,
   OnDestroy,
-  OnChanges,
   ViewChildren,
   QueryList,
   AfterViewInit,
   Renderer2,
-  ElementRef,
 } from '@angular/core';
-import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 import { Student } from 'src/app/shared/student.model';
 import { AuthService } from 'src/app/auth/auth.service';
 import { CalendarService, Calendar } from './calendar.service';

@@ -6,14 +6,38 @@
       alt="move front"
       (click)="onMove('pages')"
     />
-    <li
-      *ngFor="let section of notesS.sections"
-      [id]="section.id"
-      [ngClass]="{ selected: section.id == notesS.selectedSection.id }"
-      (click)="onSelectSection(section.id)"
-    >
-      {{ section.title }}
-    </li>
+    <div *ngFor="let section of notesS.sections; index as i">
+      <div
+        class="hrWrapper"
+        (dragenter)="onDragHint($event)"
+        (dragleave)="onDragRemoveHint()"
+        (dragover)="onDragOver($event)"
+        (drop)="onDragDrop($event)"
+      >
+        <hr [id]="'hr-' + section.id" />
+      </div>
+
+      <li
+        [id]="section.id"
+        [ngClass]="{ selected: section.id == notesS.selectedSection.id }"
+        draggable="true"
+        (dragstart)="onDrag($event)"
+        (click)="onSelectSection(section.id)"
+      >
+        {{ section.title }}
+      </li>
+
+      <div
+        *ngIf="i === notesS.sections.length - 1"
+        class="hrWrapper"
+        (dragenter)="onDragHint($event)"
+        (dragleave)="onDragRemoveHint()"
+        (dragover)="onDragOver($event)"
+        (drop)="onDragDrop($event)"
+      >
+        <hr [id]="'hr-' + section.id + '-l'" />
+      </div>
+    </div>
   </ul>
 
   <div class="pagesWrapper" *ngIf="!notesS.sectionsUp">
@@ -24,45 +48,61 @@
       (click)="onMove('sections')"
     />
 
-    <ul *ngFor="let nullLevel of notesS.orderedPages" class="pages">
-      <li
-        [id]="nullLevel.id"
-        class="top"
-        (click)="onSelectPage(nullLevel.id)"
-        [ngClass]="{ selected: setPageClass(nullLevel.id) }"
-      >
-        {{ nullLevel.title }}
-      </li>
-
-      <div *ngFor="let firstLevel of nullLevel.children">
-        <li
-          [id]="firstLevel.id"
-          class="lower first"
-          (click)="onSelectPage(firstLevel.id)"
-          [ngClass]="{ selected: setPageClass(firstLevel.id) }"
+    <ul class="pages">
+      <div *ngFor="let page of notesS.pages" [ngSwitch]="page.level">
+        <div
+          class="hrWrapper"
+          (dragenter)="onDragHint($event)"
+          (dragleave)="onDragRemoveHint()"
+          (dragover)="onDragOver($event)"
+          (drop)="onDragDrop($event)"
         >
-          {{ firstLevel.title }}
-        </li>
-        <div *ngFor="let secondLevel of firstLevel.children">
-          <li
-            [id]="secondLevel.id"
-            class="lower second"
-            (click)="onSelectPage(secondLevel.id)"
-            [ngClass]="{ selected: setPageClass(secondLevel.id) }"
-          >
-            {{ secondLevel.title }}
-          </li>
-          <div *ngFor="let thirdLevel of secondLevel.children">
-            <li
-              [id]="thirdLevel.id"
-              class="lower third"
-              (click)="onSelectPage(thirdLevel.id)"
-              [ngClass]="{ selected: setPageClass(thirdLevel.id) }"
-            >
-              {{ thirdLevel.title }}
-            </li>
-          </div>
+          <hr [id]="'hr-' + page.id" />
         </div>
+        <li
+          *ngSwitchCase="0"
+          [id]="page.id"
+          class="top"
+          (click)="onSelectPage(page.id)"
+          [ngClass]="{ selected: setPageClass(page.id) }"
+          draggable="true"
+          (dragstart)="onDrag($event)"
+        >
+          {{ page.title }}
+        </li>
+        <li
+          *ngSwitchCase="1"
+          [id]="page.id"
+          class="lower first"
+          (click)="onSelectPage(page.id)"
+          [ngClass]="{ selected: setPageClass(page.id) }"
+          draggable="true"
+          (dragstart)="onDrag($event)"
+        >
+          {{ page.title }}
+        </li>
+        <li
+          *ngSwitchCase="2"
+          [id]="page.id"
+          class="lower second"
+          (click)="onSelectPage(page.id)"
+          [ngClass]="{ selected: setPageClass(page.id) }"
+          draggable="true"
+          (dragstart)="onDrag($event)"
+        >
+          {{ page.title }}
+        </li>
+        <li
+          *ngSwitchCase="3"
+          [id]="page.id"
+          class="lower third"
+          (click)="onSelectPage(page.id)"
+          [ngClass]="{ selected: setPageClass(page.id) }"
+          draggable="true"
+          (dragstart)="onDrag($event)"
+        >
+          {{ page.title }}
+        </li>
       </div>
     </ul>
   </div>
@@ -111,30 +151,136 @@
           stroke-width="1"
           fill="yellow"
         />
+        <circle
+          cx="117"
+          cy="12"
+          r="8"
+          stroke="black"
+          stroke-width="1"
+          fill="purple"
+        />
       </svg>
       <hr />
     </div>
 
     <div [ngSwitch]="contextMenu.for" class="magageButtons">
-      <div *ngSwitchCase="null" class="manageItem" (click)="onCreateSection()">
-        <svg height="24" viewBox="0 0 24 24" width="24" version="1.1" id="svg6">
-          <path d="M0 0h24v24H0z" fill="none" id="path2" />
+      <div
+        *ngSwitchCase="null"
+        class="manageItem"
+        (click)="notesS.sectionsUp ? onCreateSection() : onCreatePage()"
+      >
+        <div class="icon">
+          <svg
+            height="22"
+            viewBox="0 0 24 24"
+            width="22"
+            version="1.1"
+            id="svg6"
+          >
+            <path d="M0 0h24v24H0z" fill="none" id="path2" />
 
-          <path
-            d="m 7.3401663,12.997021 h 3.6628127 v 3.662813 h 1.994042 v -3.662813 h 3.662813 v -1.994042 l -3.662813,0 V 7.3401663 h -1.994042 v 3.6628127 l -3.6628127,0 z m -2.4112341,6.074047 c 3.9103005,3.9103 10.2318348,3.9103 14.1421358,0 3.9103,-3.910301 3.9103,-10.2318353 0,-14.1421358 -3.910301,-3.9103005 -10.2318353,-3.9103005 -14.1421358,0 -3.9103005,3.9103005 -3.9103005,10.2318348 0,14.1421358 z M 17.656854,6.3431458 c 3.118341,3.1183409 3.118341,8.1953672 0,11.3137082 -3.118341,3.118341 -8.1953673,3.118341 -11.3137082,0 -3.118341,-3.118341 -3.118341,-8.1953673 0,-11.3137082 3.1183409,-3.118341 8.1953672,-3.118341 11.3137082,0 z"
-            id="path4"
-            fill="#424242"
-          />
-        </svg>
-        <hr />
-        <p>Add new</p>
+            <path
+              d="m 7.3401663,12.997021 h 3.6628127 v 3.662813 h 1.994042 v -3.662813 h 3.662813 v -1.994042 l -3.662813,0 V 7.3401663 h -1.994042 v 3.6628127 l -3.6628127,0 z m -2.4112341,6.074047 c 3.9103005,3.9103 10.2318348,3.9103 14.1421358,0 3.9103,-3.910301 3.9103,-10.2318353 0,-14.1421358 -3.910301,-3.9103005 -10.2318353,-3.9103005 -14.1421358,0 -3.9103005,3.9103005 -3.9103005,10.2318348 0,14.1421358 z M 17.656854,6.3431458 c 3.118341,3.1183409 3.118341,8.1953672 0,11.3137082 -3.118341,3.118341 -8.1953673,3.118341 -11.3137082,0 -3.118341,-3.118341 -3.118341,-8.1953673 0,-11.3137082 3.1183409,-3.118341 8.1953672,-3.118341 11.3137082,0 z"
+              id="path4"
+              fill="#424242"
+            />
+          </svg>
+        </div>
+        <p style="font-size: 0.9em;">Vytvoriť nové</p>
       </div>
 
       <div *ngSwitchCase="'sections'">
         <div class="manageItem" (click)="onDeleteSection()">
-          <p>X</p>
-          <hr />
-          <p>Remove</p>
+          <div class="icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+              />
+            </svg>
+          </div>
+          <p>Odstrániť</p>
+        </div>
+        <div class="manageItem" (click)="onChangeSectionToInput()">
+          <div class="icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path
+                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+              />
+              <path d="M0 0h24v24H0z" fill="none" />
+            </svg>
+          </div>
+          <p>Premenovať</p>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'pages'">
+        <div class="halfItem">
+          <div class="leftHalf manageItem" (click)="changeLevel('left')">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path d="M12 8V4l8 8-8 8v-4H4V8z" />
+            </svg>
+          </div>
+          <div class="rightHalf manageItem" (click)="changeLevel('right')">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path d="M12 8V4l8 8-8 8v-4H4V8z" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="manageItem" (click)="onDeletePage()">
+          <div class="icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+              />
+            </svg>
+          </div>
+          <p>Odstrániť</p>
+        </div>
+        <div class="manageItem" (click)="onChangePageToInput()">
+          <div class="icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path
+                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+              />
+              <path d="M0 0h24v24H0z" fill="none" />
+            </svg>
+          </div>
+          <p>Premenovať</p>
         </div>
       </div>
     </div>

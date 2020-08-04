@@ -89,7 +89,11 @@ export class CalendarService {
     });
   }
 
-  destroyEvent(personalCal: boolean, student: Student, eventId:number): Observable<any> {
+  destroyEvent(
+    personalCal: boolean,
+    student: Student,
+    eventId: number
+  ): Observable<any> {
     let setUri =
       personalCal === true
         ? `student/calendar/${eventId}`
@@ -152,8 +156,8 @@ export class CalendarService {
     console.log(form);
     let newEvent = {
       id: id,
-      ...form.value
-    }
+      ...form.value,
+    };
     console.log(newEvent);
     let AddToDay = new Date(form.get('from').value).toDateString();
     this.calendar.pipe(take(1)).subscribe((cal: Calendar[]) => {
